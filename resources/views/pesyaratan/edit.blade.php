@@ -22,6 +22,16 @@
             </button>
         </div>
         @endif
+           <!-- Menampilkan Pesan Error -->
+           @if(session('error'))
+           <div class="alert alert-danger alert-dismissible fade show" role="alert">
+               <h5><i class="fas fa-exclamation-triangle"></i> Peringatan :</h5>
+               {{ session('error') }}
+               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+               </button>
+           </div>
+           @endif
 
         @if ($errors->any())
         <div class="callout callout-danger alert alert-danger alert-dismissible fade show">
@@ -59,6 +69,14 @@
                         @endforeach
                     </select>
                     
+                    <label for="nilaip">Tahun Ajaran</label>
+                    <select name="nilaip" class="form-control my-1 mr-sm-2 bg-light" id="nilaip"  oninput="setCustomValidity('')">
+                            <option value="">-- Pilih Tahun Ajaran  --</option>
+                            @foreach($nilaiajaran as $test)
+                            <option value="{{$test->tahun_pelajaran}}"> {{$test->tahun_pelajaran}}
+                            </option>
+                            @endforeach
+                        </select>
                     {{-- <label for="nilai">Nilai</label>
                     <input value="{{old('nilai')}}" name="nilai" type="text" class="form-control" id="nilai" placeholder="nilai" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">                    --}}
                     {{-- <label for="nama">Beasiswa</label>

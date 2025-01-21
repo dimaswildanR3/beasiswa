@@ -81,6 +81,9 @@
                                     {{-- // ->where('keterangan', 'like', '%' . $cari . '%') --}}
                                     
                                     <td>
+                                        @php
+                                            var_dump($siswa->nilai)
+                                        @endphp
                                         {{ ($siswa->nilai != 0 ? $siswa->nilai : 1) / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot') +
                                            ($siswa->nilai != 0 ? $siswa->nilai : 1) / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot') +
                                            ($siswa->nilai != 0 ? $siswa->nilai : 1) / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot') }}

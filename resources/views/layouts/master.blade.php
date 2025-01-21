@@ -185,6 +185,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="/nilaipelajaran/index" class="nav-link text-black">
+                                    <i class="far fas fa-user nav-icon"></i>
+                                    <p>Nilai Ajaran</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="/beasiswa/index" class="nav-link text-black">
                                     <i class="fas fa-solid fa-wallet nav-icon"></i>
                                     <p>Beasiswa</p>
@@ -228,21 +234,22 @@
                             <li class="nav-item">
                                 <a href="/laporansiswa/index" class="nav-link text-black">
                                     <i class="far fas fa-user nav-icon"></i>
-                                    <p>Laporan Persiswa</p>
+                                    <p>Lap. Beasiswa Berprestasi</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="/laporasseluruh/index" class="nav-link text-black">
                                     <i class="far fas fa fa-file nav-icon"></i>
-                                    <p>Laporan Seluruh</p>
+                                    <p>Lap. Beasiswa KM</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            
+                            {{-- <li class="nav-item">
                                 <a href="/laporanpendaftaran/index" class="nav-link text-black">
                                     <i class="far fas fa fa-file nav-icon"></i>
                                     <p>Laporan Pendaftaran</p>
                                 </a>
-                            </li>                        
+                            </li>                         --}}
                         </ul>
                     </li>
                     {{-- <li class="nav-item">

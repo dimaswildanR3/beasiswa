@@ -64,8 +64,8 @@
                         <input value="{{old('tanggungan')}}" name="tanggungan" type="number" class="form-control" id="tanggungan" placeholder="Tanggungan Orang Tua" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
                         <label for="tahun">Tahun Mengajukan</label>
                         <input value="{{old('tahun')}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="Tahun Mengajukan" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
-                        <label for="nilai">Nilai</label>
-                        <input value="{{old('nilai')}}" name="nilai" type="number" class="form-control" id="nilai" placeholder="Nilai" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                        {{-- <label for="nilai">Nilai</label>
+                        <input value="{{old('nilai')}}" name="nilai" type="number" class="form-control" id="nilai" placeholder="Nilai" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')"> --}}
                         <div class="col-sm-6">
                         <label for="jarak">Jarak</label>
                         <input value="{{old('jarak')}}" name="jarak" type="number" class="form-control" id="jarak" placeholder="Jarak" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">

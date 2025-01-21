@@ -45,7 +45,7 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/perhitunganbeasiswa/index', 'PesyaratanController@indexxx')->name('perhitunganbeasiswa');
     Route::get('/perhitunganbeasiswa/export_excel', 'PesyaratanController@export_excell');
     Route::get('/pesyaratan/index', 'PesyaratanController@index')->name('pesyaratan');
-    Route::get('/laporasseluruh/index', 'PesyaratanController@indexx');
+    Route::get('/laporasseluruh/index', 'PesyaratanController@indexxs');
     Route::get('/laporasseluruh/index/cari', 'PesyaratanController@cari');
     Route::get('/pesyaratan/create', 'PesyaratanController@create');
     Route::get('/pesyaratan/{id}/show', 'PesyaratanController@show');
@@ -165,6 +165,15 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
 
 //Route untuk user Petugas Administrasi Keuangan dan Admin
 Route::group(['middleware' => ['auth', 'checkRole:admin,PetugasAdministrasiKeuangan']], function () {
+
+    Route::get('/nilaipelajaran/index', 'NilaiPelajaranController@index')->name('nilaipelajaran.index');
+Route::get('/nilaipelajaran/create', 'NilaiPelajaranController@create')->name('nilaipelajaran.create');
+Route::post('/nilaipelajaran/store', 'NilaiPelajaranController@store')->name('nilaipelajaran.store');
+Route::get('/nilaipelajaran/{id}/edit', 'NilaiPelajaranController@edit')->name('nilaipelajaran.edit');
+Route::post('/nilaipelajaran/{id}/update', 'NilaiPelajaranController@update')->name('nilaipelajaran.update');
+Route::post('/nilaipelajaran/{id}/delete', 'NilaiPelajaranController@destroy')->name('nilaipelajaran.destroy');
+Route::post('/nilaipelajaran/filter', 'NilaiPelajaranController@filter')->name('nilaipelajaran.filter');
+Route::get('/nilaipelajaran/{filter}/print', 'NilaiPelajaranController@print')->name('nilaipelajaran.print');
 
     Route::get('/pembayaran/tagihan/index', 'TagihanController@index')->name('pembayaran.tagihan.index');
     Route::get('/pembayaran/tagihan/create', 'TagihanController@create');

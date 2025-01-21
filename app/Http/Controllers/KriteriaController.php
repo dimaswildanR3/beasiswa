@@ -51,6 +51,14 @@ class KriteriaController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'id_beasiswa' => 'required',
+         
+        ], [
+            'id_beasiswa.required' => 'Beasiswa harus diisi.',
+       
+        ]);
+        
             $kriteria = new Kriteria;
             $kriteria->id_beasiswa             = $request->input('id_beasiswa');
             $kriteria->nama            = $request->input('nama');
@@ -108,6 +116,13 @@ class KriteriaController extends Controller
      */
     public function update(Request $request,$id)
     {
+        $request->validate([
+            'id_beasiswa' => 'required',
+         
+        ], [
+            'id_beasiswa.required' => 'Beasiswa harus diisi.',
+       
+        ]);
         $kriteria = Kriteria::where('id', $id)->first();
         $kriteria->id_beasiswa             = $request->input('id_beasiswa');
         $kriteria->nama            = $request->input('nama');

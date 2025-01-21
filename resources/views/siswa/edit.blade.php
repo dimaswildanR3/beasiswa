@@ -61,8 +61,8 @@
                     <input value="{{$siswa->penghasilan}}" name="penghasilan" type="number" class="form-control" id="penghasilan" placeholder="penghasilan" >
                     <label for="tahun">Tahun Mengajukan</label>
                     <input value="{{$siswa->tahun}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="tahun" >
-                    <label for="nilai">Nilai</label>
-                    <input value="{{$siswa->nilai}}" name="nilai" type="number" class="form-control" id="nilai" placeholder="nilai" >
+                    {{-- <label for="nilai">Nilai</label>
+                    <input value="{{$siswa->nilai}}" name="nilai" type="number" class="form-control" id="nilai" placeholder="nilai" > --}}
                     <label for="jarak">Jarak</label>
                     <input value="{{$siswa->jarak}}" name="jarak" type="number" class="form-control" id="jarak" placeholder="jarak" >
 

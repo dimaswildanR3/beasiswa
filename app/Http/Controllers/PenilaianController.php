@@ -54,6 +54,14 @@ class PenilaianController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'id_model' => 'required',
+         
+        ], [
+            'id_model.required' => 'Beasiswa harus diisi.',
+       
+        ]);
+        
             $Penilaian = new Penilaian;
             $Penilaian->id_model             = $request->input('id_model');
             $siswa = \App\Models::where('id', $request->input('id_model'))->first();
@@ -102,9 +110,10 @@ class PenilaianController extends Controller
                 return redirect()->to('/');
         }
         $Penilaian = Penilaian::findOrFail($id);
+        $Model = \App\Models::get();
         $Beasiswa = \App\Beasiswa::get();
         $Kriteria = \App\Kriteria::get();
-        return view('penilaian/edit', compact(['Penilaian','Kriteria','Beasiswa','Beasiswa' => $Beasiswa,'kriteria' => $Kriteria]));
+        return view('penilaian/edit', compact(['Penilaian','Kriteria','Beasiswa','Model','Beasiswa' => $Beasiswa,'kriteria' => $Kriteria]));
 
     
     }
@@ -118,11 +127,18 @@ class PenilaianController extends Controller
      */
     public function update(Request $request,$id)
     {
+        $request->validate([
+            'id_model' => 'required',
+         
+        ], [
+            'id_model.required' => 'Beasiswa harus diisi.',
+       
+        ]);
         $Penilaian = Penilaian::where('id', $id)->first();
         $Penilaian->id_model             = $request->input('id_model');
         $siswa = \App\Models::where('id', $request->input('id_model'))->first();
         if($siswa){
-            $Pesyaratan     ->id_beasiswa          = $siswa->id_beasiswa;
+            $Penilaian     ->id_beasiswa          = $siswa->id_beasiswa;
             $Penilaian->id_kriteria            = $siswa->id_kriteria;
         }
         // $Penilaian->id_beasiswa             = $request->input('id_beasiswa');

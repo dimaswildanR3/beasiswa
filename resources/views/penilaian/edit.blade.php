@@ -43,21 +43,13 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="nama">Beasiswa</label>
-                    <select name="id_beasiswa" class="form-control my-1 mr-sm-2 bg-light" id="id_beasiswa"  oninput="setCustomValidity('')">
+                    <select name="id_model" class="form-control my-1 mr-sm-2 bg-light" id="id_model"  oninput="setCustomValidity('')">
                         <option value="">-- Pilih Beasiswa --</option>
-                        @foreach($Beasiswa as $ayah)
-                        <option value="{{$ayah->id}}"> {{$ayah->nama_beasiswa}}
+                        @foreach($Model as $ayah)
+                        <option value="{{$ayah->id}}"> {{$ayah->beasiswa->nama_beasiswa}} Kriteria {{$ayah->kriteria->nama}}
                         </option>
                         @endforeach
-                    </select>
-                    <label for="nama">Kriteria</label>
-                    <select name="id_kriteria" class="form-control my-1 mr-sm-2 bg-light" id="id_kriteria"  oninput="setCustomValidity('')">
-                        <option value="">-- Pilih Kriteria --</option>
-                        @foreach($Kriteria as $ibu)
-                        <option value="{{$ibu->id}}"> {{$ibu->nama}}
-                        </option>
-                        @endforeach
-                    </select>
+                    </select>       
                     <label for="keterangan">Nilai</label>
                     <table>
                         <tr>

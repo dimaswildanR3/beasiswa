@@ -57,7 +57,7 @@ class PesyaratanController extends Controller
             Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
             return redirect()->to('/');
         }
-        $Beasiswa = \App\Model::get();
+        $Beasiswa = \App\Beasiswa::get();
         // $Siswa = \App\Siswa::get();
         $datas = \App\Nilai::get();
         
@@ -72,32 +72,65 @@ class PesyaratanController extends Controller
 
         return view('laporasseluruh.index', compact('datas', 'cari','Beasiswa'));
     }
-    public function indexx()
-        {
-            
-            if(Auth::user()->level == 'admin') {
-                Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
-                return redirect()->to('/');
-            }
+    public function indexx(Request $request)
+    {
+        // Cek level user untuk memastikan hanya user selain admin yang dapat mengakses
+        if (Auth::user()->level == 'admin') {
+            Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
+            return redirect()->to('/');
+        }
+    
+        // Ambil data siswa dan nilai
+        $siswa = Siswa::get();
+        $datas = Nilai::get();
+    
+        // Ambil data Beasiswa
+        $Beasiswa = \App\Beasiswa::get();
+    
+        // Cek apakah ada filter tahun yang dipilih dari form
+        if ($request->has('tahun') && $request->tahun != '') {
+            // Filter data siswa berdasarkan tahun
+            $siswa = Siswa::where('tahun', $request->tahun)->get();
+            $datas = Nilai::whereIn('nis', $siswa->pluck('nis'))->get(); // Mengambil nilai yang sesuai dengan siswa yang difilter berdasarkan tahun
+        }
+    
+        // Kirimkan data ke view
+        return view('laporansiswa.index', compact('Beasiswa', 'datas', 'siswa'));
+    }
+    
+    public function cari(Request $request)
+{
+    // Ambil nilai cari dan tahun dari request
+    $cari = $request->cari;
+    $tahun = $request->tahun;
+    
+    // Ambil data Beasiswa dan Siswa
+    $Beasiswa = \App\Beasiswa::get();
+    $siswa = \App\Siswa::get();
+    
+    
+    // Mulai query untuk mengambil data siswa
+    $query = Nilai::query();
+    // Filter berdasarkan nama jika ada input
+    if ($cari) {
+        $query->where('nis', $cari);
+    }
+    // var_dump($cari);
+    // die;
 
-            $siswa = Siswa::get();
-            $datas = Nilai::get();
-           
-//           
-            // $cari = Siswa::where('tahun', $request->input('tahun'))
-            $Beasiswa = \App\Beasiswa::get();
-            return view('laporansiswa.index', compact(['Beasiswa','datas','Beasiswa' => $Beasiswa,'datas' => $datas]));
-            // return view('laporansiswa.index', compact(['Beasiswa','datas','results','Beasiswa' => $Beasiswa,'results' => $results,'datas' => $datas]));
-        }
-        public function cari(Request $request)
-        {
-            $cari = $request->cari;
-            $Beasiswa = \App\Beasiswa::get();
+    // Filter berdasarkan tahun jika ada input
+    if ($tahun) {
+        $query->whereYear('tahun', $tahun);  // Pastikan filter ini sesuai dengan field yang digunakan untuk tahun
+    }
+
+    // Ambil data siswa dengan paginasi
+    $datas = $query->paginate();
+
+    // Return ke view dengan data yang diperlukan
+    return view('laporansiswa.index', compact('datas', 'cari', 'Beasiswa', 'tahun', 'siswa'));
+}
+
     
-            $datas = Siswa::where('nama','like',"%".$cari."%")->paginate();
-    
-            return view('laporansiswa.index', compact('datas', 'cari','Beasiswa'));
-        }
 
     /**
      * Show the form for creating a new resource.
@@ -112,11 +145,12 @@ class PesyaratanController extends Controller
         }
         
         
+        $nilaiajaran = \App\NilaiPelajaran::select('tahun_pelajaran')->distinct()->get();
         $Pesyaratan = \App\Nilai::get();
         $Siswa = \App\Siswa::get();
         $Model = \App\Models::get();
         // $Kriteria = \App\Kriteria::get();
-        return view('pesyaratan.create', compact(['Pesyaratan','Model','Siswa','Pesyaratan' => $Pesyaratan,'Siswa' => $Siswa,'Model' => $Model,'Model' => $Model,]));
+        return view('pesyaratan.create', compact(['Pesyaratan','Model','Siswa','nilaiajaran','Pesyaratan' => $Pesyaratan,'Siswa' => $Siswa,'Model' => $Model,'Model' => $Model,]));
     }
 
     /**
@@ -127,6 +161,15 @@ class PesyaratanController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'id_model' => 'required',
+            'nis' => 'required',
+            'nilaip' => 'required',
+        ], [
+            'id_model.required' => 'Beasiswa harus diisi.',
+            'nis.required' => 'Siswa harus diisi.',
+            'nilaip.required' => 'Tahun Ajaran harus diisi.',
+        ]);
             $Pesyaratan      = new Nilai;
 
              $Pesyaratan->id_model             = $request->input('id_model');
@@ -138,35 +181,44 @@ class PesyaratanController extends Controller
             // $Pesyaratan     ->keterangan            = $request->input('ketex rangan');
             $Pesyaratan->nis            = $request->input('nis');
             $siswa = \App\Siswa::where('id', $Pesyaratan->nis)->first();  
-
+            $nilaip            = $request->input('nilaip');
+            $nilaibro = \App\NilaiPelajaran::where('nis', $Pesyaratan->nis)
+    ->where('tahun_pelajaran',  $nilaip)
+    ->first();
+    if (!$nilaibro) {
+        return redirect()->back()->with('error', 'Nilai pelajaran tidak ditemukan untuk tahun ajaran yang dipilih.');
+    }
+            // var_dump($nilaibro->nilai);
+            // die;
             $Kriteria = \App\Penilaian::where('id_kriteria',$Pesyaratan->id_kriteria)->get();  
             foreach ($Kriteria as $test){
-               if($siswa->nilai >= $test->keterangan){
+               if($nilaibro->nilai >= $test->keterangan){
                 $Pesyaratan->nilai = $test->bobot;
                 // dd($Pesyaratan->nilai);
             }
             }
             foreach ($Kriteria as $testt){
-               if($siswa->penghasilan >= $testt->keterangan){
-                $Pesyaratan->penghasilan = $testt->bobot;
+               if($nilaibro->penghasilan >= $testt->keterangan){
+                $siswa->penghasilan = $testt->bobot;
                 // dd($Pesyaratan->penghasilan);
             }
             }
             foreach ($Kriteria as $testi){
-               if($siswa->tanggungan >= $testi->keterangan){
-                $Pesyaratan->tanggungan = $testi->bobot;
+               if($nilaibro->tanggungan >= $testi->keterangan){
+                $siswa->tanggungan = $testi->bobot;
                 // dd($Pesyaratan->tanggungan);
             }
             }
             foreach ($Kriteria as $ti){
-               if($siswa->jarak >= $ti->keterangan){
+               if($nilaibro->jarak >= $ti->keterangan){
                 $Pesyaratan->jarak = $ti->bobot;
             }
         }
         // dd($Pesyaratan->jarak);
-            $Pesyaratan->tahun   = $siswa->tahun;
+            $Pesyaratan->tahun   =  $nilaip;
          
-        
+        // var_dump($Pesyaratan);
+        // die;
             $Pesyaratan->save();
             
             return redirect()->route('pesyaratan')->with('sukses', 'Data Pesyaratan Berhasil Ditambah');
@@ -201,12 +253,13 @@ class PesyaratanController extends Controller
                 Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
                 return redirect()->to('/');
         }
+        $nilaiajaran = \App\NilaiPelajaran::select('tahun_pelajaran')->distinct()->get();
         $Penilaian = Nilai::findOrFail($id);
         $Beasiswa = \App\Beasiswa::get();
         $Kriteria = \App\Kriteria::get();
         $Siswa = \App\Siswa::get();
         $Model = \App\Models::get();
-        return view('Pesyaratan/edit', compact(['Kriteria','Penilaian','Siswa','Beasiswa','Model','Model' => $Model,'Beasiswa' => $Beasiswa,'kriteria' => $Kriteria,'Siswa' => $Siswa]));
+        return view('Pesyaratan/edit', compact(['Kriteria','Penilaian','Siswa','Beasiswa','Model','nilaiajaran','Model' => $Model,'Beasiswa' => $Beasiswa,'kriteria' => $Kriteria,'Siswa' => $Siswa]));
 
     
     }
@@ -220,6 +273,15 @@ class PesyaratanController extends Controller
      */
     public function update(Request $request,$id)
     {
+        $this->validate($request, [
+            'id_model' => 'required',
+            'nis' => 'required',
+            'nilaip' => 'required',
+        ], [
+            'id_model.required' => 'Beasiswa harus diisi.',
+            'nis.required' => 'Siswa harus diisi.',
+            'nilaip.required' => 'Tahun Ajaran harus diisi.',
+        ]);
         $Pesyaratan      = Nilai::where('id', $id)->first();
         $Pesyaratan->id_model             = $request->input('id_model');
         $model = \App\Models::where('id', $Pesyaratan->id_model)->first();
@@ -230,10 +292,16 @@ class PesyaratanController extends Controller
         // $Pesyaratan     ->keterangan            = $request->input('ketex rangan');
         $Pesyaratan->nis            = $request->input('nis');
         $siswa = \App\Siswa::where('id', $Pesyaratan->nis)->first();  
-
+        $nilaip            = $request->input('nilaip');
+        $nilaibro = \App\NilaiPelajaran::where('nis', $Pesyaratan->nis)
+->where('tahun_pelajaran',  $nilaip)
+->first();
+if (!$nilaibro) {
+    return redirect()->back()->with('error', 'Nilai pelajaran tidak ditemukan untuk tahun ajaran yang dipilih.');
+}
         $Kriteria = \App\Penilaian::where('id_kriteria',$Pesyaratan->id_kriteria)->get();  
         foreach ($Kriteria as $test){
-           if($siswa->nilai >= $test->keterangan){
+           if($nilaibro->nilai >= $test->keterangan){
             $Pesyaratan->nilai = $test->bobot;
             // dd($Pesyaratan->nilai);
         }
@@ -256,7 +324,7 @@ class PesyaratanController extends Controller
         }
     }
     // dd($Pesyaratan->jarak);
-        $Pesyaratan->tahun   = $siswa->tahun;
+        $Pesyaratan->tahun   = $nilaip;
      
     
         
