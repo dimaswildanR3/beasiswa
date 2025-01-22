@@ -234,13 +234,13 @@
                             <li class="nav-item">
                                 <a href="/laporansiswa/index" class="nav-link text-black">
                                     <i class="far fas fa-user nav-icon"></i>
-                                    <p>Lap. Beasiswa Berprestasi</p>
+                                    <p>Laporam BP</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="/laporasseluruh/index" class="nav-link text-black">
                                     <i class="far fas fa fa-file nav-icon"></i>
-                                    <p>Lap. Beasiswa KM</p>
+                                    <p>Laporam BKM</p>
                                 </a>
                             </li>
                             
@@ -342,7 +342,7 @@
                 <b>Smpn 1 sron banyuwangi | </b>
                 Versi 1.0.0
             </div> --}}
-            Copyright &copy; 2023 | by : adiwisma
+            Copyright &copy; 2025 | by : adywisma
         </footer>
 
 

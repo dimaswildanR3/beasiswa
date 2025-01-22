@@ -1,11 +1,12 @@
 @extends('layouts.master')
+
 @section('content')
-<section class="content card" style="padding: 10px 10px 20px 20px  ">
+<section class="content card" style="padding: 10px 10px 20px 20px;">
     <div class="box">
         @if(session('sukses'))
-        <div class="callout callout-success alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
             <h5><i class="fas fa-check"></i> Sukses :</h5>
-            {{session('sukses')}}
+            {{ session('sukses') }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -13,9 +14,9 @@
         @endif
 
         @if(session('warning'))
-        <div class="callout callout-warning alert alert-warning alert-dismissible fade show" role="alert">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
             <h5><i class="fas fa-info"></i> Informasi :</h5>
-            {{session('warning')}}
+            {{ session('warning') }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -23,7 +24,7 @@
         @endif
 
         @if ($errors->any())
-        <div class="callout callout-danger alert alert-danger alert-dismissible fade show">
+        <div class="alert alert-danger alert-dismissible fade show">
             <h5><i class="fas fa-exclamation-triangle"></i> Peringatan :</h5>
             <ul>
                 @foreach ($errors->all() as $error)
@@ -35,65 +36,74 @@
             </button>
         </div>
         @endif
+
         <div class="row">
             <div class="col">
-                <h4><i class="nav-icon fas fa-child my-0 btn-sm-1"></i>Pesyaratan</h3>
+                <h4><i class="nav-icon fas fa-child my-0 btn-sm-1"></i> Pesyaratan</h4>
                 <hr>
             </div>
         </div>
-        <div>
+
+        <div class="row mb-2">
             <div class="col">
-                <a class="btn btn-primary btn-sm my-1 mr-sm-1" href="create" role="button"><i class="fas fa-plus"></i> Tambah Data</a>
-                <br>
+                <a class="btn btn-primary btn-sm" href="{{ route('pesyaratan.create') }}">
+                    <i class="fas fa-plus"></i> Tambah Data
+                </a>
             </div>
         </div>
-        <div class="row">
-            <div class="row table-responsive">
-                <div class="col-12">
-                    <table class="table table-hover table-head-fixed" id='tabelAgendaMasuk'>
-                        <thead>
-                            <tr class="bg-light">
-                                <th>No.</th>
-                                {{-- <th>NIS</th> --}}
-                                <th><div style="width:110px;">Nis</div></th>
-                                <th><div style="width:110px;">Nama</div></th>
-                                <th><div style="width:110px;">Beasiswa</div></th>
-                                <th><div style="width:110px;">Kriteria</div></th>
-                                <th><div style="width:110px;">Nilai</div></th>
-                                <th><center> Aksi</center></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php $no = 0; ?>
-                            @foreach($datas as $Penilaian)
-                            <?php $no++; ?>
-                            <tr>
-                                <td>{{$no}}</td>
-                                {{-- <td>{{$Penilaian->nis}}</td> --}}
-                                <td>{{$Penilaian->siswa->nis}}</td>
-                                <td>{{$Penilaian->siswa->nama}}</td>
-                                <td>{{$Penilaian->beasiswa->nama_beasiswa}}</td>
-                                <td>{{$Penilaian->kriteria->nama}}</td>
-                                <td>{{$Penilaian->nilai}}</td>
-                                <td>
-                                    <center>
-                                    <div class="ok"style="width:220px;">
-                                    <a href="/pesyaratan/{{$Penilaian->id}}/edit" class="btn btn-primary btn-sm my-1 mr-sm-1"><i class="nav-icon fas fa-pencil-alt"></i> Edit</a>
+
+        <div class="row table-responsive">
+            <div class="col-12">
+                <table class="table table-hover table-head-fixed" id="tabelAgendaMasuk">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>No.</th>
+                            <th style="width:110px;">NIS</th>
+                            <th style="width:110px;">Nama</th>
+                            <th style="width:110px;">Beasiswa</th>
+                            <th style="width:110px;">Kriteria</th>
+                            <th style="width:110px;">Nilai</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($datas as $index => $Penilaian)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $Penilaian->siswa?->nis ?? '-' }}</td>
+                            <td>{{ $Penilaian->siswa?->nama ?? '-' }}</td>
+                            <td>{{ $Penilaian->beasiswa?->nama_beasiswa ?? '-' }}</td>
+                            <td>{{ $Penilaian->kriteria?->nama ?? '-' }}</td>
+                            <td>{{ $Penilaian->nilai }}</td>
+                            <td class="text-center">
+                                <div style="width: 220px;">
+                                    <a href="{{ route('pesyaratan.edit', $Penilaian->id) }}" class="btn btn-primary btn-sm">
+                                        <i class="nav-icon fas fa-pencil-alt"></i> Edit
+                                    </a>
+
                                     @if (auth()->user()->role == 'admin')
-                                    <a href="/pesyaratan/{{$Penilaian->id}}/delete" class="btn btn-danger btn-sm my-1 mr-sm-1" onclick="return confirm('Hapus Data ?')"><i class="nav-icon fas fa-trash"></i>
-                                        Hapus</a>
-                                    {{-- <a href="/kriteria/{{$Penilaian->id}}/registrasi" class="btn btn-success btn-sm my-1 mr-sm-1"><i class="nav-icon fas fa-child"></i> Detail</a> --}}
+                                    <form action="{{ route('pesyaratan.destroy', $Penilaian->id) }}" method="POST" class="d-inline"
+                                        onsubmit="return confirm('Hapus Data?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="nav-icon fas fa-trash"></i> Hapus
+                                        </button>
+                                    </form>
                                     @endif
                                 </div>
-                            </center>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="7" class="text-center">Tidak ada data.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
+
     </div>
 </section>
 @endsection

@@ -37,7 +37,7 @@
         </div>
         @endif
         <form action="/nilaipelajaran/store" method="POST" enctype="multipart/form-data">
-            <h4><i class="nav-icon fas fa-child my-1 btn-sm-1"></i> Tambah Data Siswa</h4>
+            <h4><i class="nav-icon fas fa-child my-1 btn-sm-1"></i> Tambah Data Nilai Siswa</h4>
             <hr>
             {{csrf_field()}}
             <div class="row">

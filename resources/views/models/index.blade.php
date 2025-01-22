@@ -70,7 +70,7 @@
                                 {{-- <td>{{$kriteria->nis}}</td> --}}
                                 <td>{{$kriteria->beasiswa->nama_beasiswa}}</td>
                                 <td>{{$kriteria->Kriteria->nama}}</td>
-                                <td>{{$kriteria->bobot*100}}%</td>
+                                <td>{{$kriteria->bobot}}%</td>
                                 <td>
                                     <center>
                                     <div class="ok"style="width:220px;">

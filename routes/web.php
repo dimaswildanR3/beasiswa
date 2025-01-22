@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/penilaian/{id}/delete', 'PenilaianController@delete');
 
     Route::get('/laporansiswa/index', 'PesyaratanController@indexx');
-    Route::get('/laporansiswa/index/cari', 'PesyaratanController@cari');
+    Route::get('/laporansiswa/index/cari', 'PesyaratanController@cari')->name('laporansiswa.index.cari');
     Route::get('/laporansiswa/export_excel', 'PesyaratanController@export_excel');
     Route::get('/perhitunganbeasiswa/index', 'PesyaratanController@indexxx')->name('perhitunganbeasiswa');
     Route::get('/perhitunganbeasiswa/export_excel', 'PesyaratanController@export_excell');

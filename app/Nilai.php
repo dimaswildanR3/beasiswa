@@ -28,5 +28,11 @@ class Nilai extends Model
           return $this->belongsTo(Beasiswa::class, 'id_beasiswa');
             // return $this->hasOne('App\Kriteria');
           }
+          public function nilaipelajaran()
+    {
+        return $this->hasMany(NilaiPelajaran::class, 'nis', 'nis');
+        
+        // return $this->hasOne(NilaiPelajaran::class, 'nis', 'nis');
+    }
 
 }

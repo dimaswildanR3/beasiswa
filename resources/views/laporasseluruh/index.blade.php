@@ -37,7 +37,7 @@
         @endif
         <div class="row">
             <div class="col">
-                <h4><i class="nav-icon fas fa-child my-0 btn-sm-1"></i> Laporan Beasiswa Kurang Mampu</h3>
+                <h4><i class="nav-icon fas fa-child my-0 btn-sm-1"></i> Laporan Beasiswa Kurang Mampu (BKM)</h3>
                 <hr>
             </div>
         </div>
@@ -62,45 +62,43 @@
             </div>
         </div>
         <div class="row">
-            <div class="row table-responsive">
-                <div class="col-12">
-                    <table class="table table-hover table-head-fixed" id='tabelAgendaMasuk'>
-                        <thead>
-                            <tr class="bg-light">
-                        {{-- <thead>
-                            <tr class="bg-light"> --}}
-                                {{-- <th>No.</th> --}}
-                                <th>NIS</th>
-                                <th><div style="width:110px;">Nama</div></th>
-                                {{-- <th><div style="width:110px;">nilai</div></th> --}}
-                                {{-- @foreach($Beasiswa as $siswaa)
-                                <th><div style="width:110px;">{{$siswaa->nama_beasiswa}}</div></th>
-                                @endforeach --}}
-                                <th><div style="width:110px;">Total Perhitungan Bobotbeasiswa Kepala</div></th>
-                                <th><div style="width:110px;">Total Perhitungan Bobotbeasiswa Yayasan</div></th>
-                                <th><div style="width:110px;">Total Perhitungan Bobotbeasiswa Orang Tua Asuh</div></th>
-                                {{-- <th><center> Aksi</center></th> --}}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{-- @if ($datas && $datas->count() > 0) --}}
-                            <?php $no = 0; ?>
-                            @foreach($datas as $siswa)
-                            <?php $no++; ?>
-                            <tr>
-                                {{-- <td>{{$no}}</td> --}}
-                                <td>{{$siswa->siswa->nis}}</td>
-                                <td>{{$siswa->siswa->nama}}</td>
-                                <td>{{($siswa->nilai/DB::table('penilaian')->where('id_kriteria',"1")->count()*DB::table('model')->where('id',"1")->value('bobot'))+($siswa->nilai/DB::table('penilaian')->where('id_kriteria',"1")->count()*DB::table('model')->where('id',"2")->value('bobot'))+($siswa->nilai/DB::table('penilaian')->where('id_kriteria',"1")->count()*DB::table('model')->where('id',"3")->value('bobot'))}}</td>
-                                <td>{{($siswa->nilai/DB::table('penilaian')->where('id_kriteria',"1")->count()*DB::table('model')->where('id',"10")->value('bobot'))+($siswa->nilai/DB::table('penilaian')->where('id_kriteria',"1")->count()*DB::table('model')->where('id',"10")->value('bobot'))+($siswa->nilai/DB::table('penilaian')->where('id_kriteria',"1")->count()*DB::table('model')->where('id',"10")->value('bobot'))}}</td>
-                                <td>{{($siswa->nilai/DB::table('penilaian')->where('id_kriteria',"1")->count()*DB::table('model')->where('id',"10")->value('bobot'))+($siswa->nilai/DB::table('penilaian')->where('id_kriteria',"1")->count()*DB::table('model')->where('id',"10")->value('bobot'))+($siswa->nilai/DB::table('penilaian')->where('id_kriteria',"1")->count()*DB::table('model')->where('id',"40")->value('bobot'))}}</td>
-                                
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    {{-- @else --}}
-                </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="bg-light">
+                            <th>NIS</th>
+                            <th>Nama</th>
+                            <th>Tahun Angkatan</th>
+                            <th>Nilai Preferensi</th>
+                            {{-- <th>Beasiswa Yayasan</th>
+                            <th>Beasiswa Orang Tua Asuh</th> --}}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($datas as $siswa)
+                        <tr>
+                            <td>{{ $siswa->siswa->nis }}</td>
+                            <td>{{ $siswa->siswa->nama }}</td>
+                            <td>{{ $siswa->siswa->tahun }}</td>
+                            <td>
+                                {{ ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 1)->value('bobot')) +
+                                   ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 2)->value('bobot')) +
+                                   ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 3)->value('bobot')) }}
+                            </td>
+                            {{-- <td>
+                                {{ ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 10)->value('bobot')) +
+                                   ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 10)->value('bobot')) +
+                                   ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 10)->value('bobot')) }}
+                            </td>
+                            <td>
+                                {{ ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 10)->value('bobot')) +
+                                   ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 10)->value('bobot')) +
+                                   ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 40)->value('bobot')) }}
+                            </td> --}}
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

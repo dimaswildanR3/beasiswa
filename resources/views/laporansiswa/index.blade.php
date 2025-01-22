@@ -33,7 +33,7 @@
 
         <div class="row">
             <div class="col">
-                <h4><i class="nav-icon fas fa-child"></i> Laporan Beasiswa Berprestasi</h4>
+                <h4><i class="nav-icon fas fa-child"></i> Laporan Beasiswa Prestasi (BP)</h4>
                 <hr>
             </div>
         </div>
@@ -77,9 +77,9 @@
                         <th>NIS</th>
                         <th>Nama</th>
                         <th>Tahun Angkatan</th>
-                        <th>Beasiswa Kepala</th>
-                        <th>Beasiswa Yayasan</th>
-                        <th>Beasiswa Orang Tua Asuh</th>
+                        <th>Nilai Preferensi</th>
+                        {{-- <th>Beasiswa Yayasan</th>
+                        <th>Beasiswa Orang Tua Asuh</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -93,7 +93,7 @@
                                ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 2)->value('bobot')) +
                                ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 3)->value('bobot')) }}
                         </td>
-                        <td>
+                        {{-- <td>
                             {{ ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 10)->value('bobot')) +
                                ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 10)->value('bobot')) +
                                ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 10)->value('bobot')) }}
@@ -102,7 +102,7 @@
                             {{ ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 10)->value('bobot')) +
                                ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 10)->value('bobot')) +
                                ($siswa->nilai / DB::table('penilaian')->where('id_kriteria', 1)->count() * DB::table('model')->where('id', 40)->value('bobot')) }}
-                        </td>
+                        </td> --}}
                     </tr>
                     @endforeach
                 </tbody>
