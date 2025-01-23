@@ -98,6 +98,13 @@
                 <a href="{{ route('laporanseluruhsiswa') }}" class="btn btn-sm btn-warning">Reset</a>
             </div>
         @endif
+         <div class="col">
+                {{-- <button type="submit" class="btn btn-primary btn-sm my-1 mr-sm-1 "><i class="fas fa-print"></i> Cetak</button>             --}}
+                <a class="btn btn-success btn-sm my-1 mr-sm-1 " href="/laporansiswa/export_excel" role="button"><i class="fas fa-file-excel"></i> Download Excel</a>
+                {{-- <a class="btn btn-success btn-sm my-1 mr-sm-1 " href="index" role="button"><i class="fas fa-sync-alt"></i> Refresh</a> --}}
+                {{-- <a class="btn btn-primary btn-sm my-1 mr-sm-1" href="create" role="button"><i class="fas fa-plus"></i> Tambah Data</a> --}}
+                <br>
+            </div>
 
         <div class="row">
             <div class="col-12 table-responsive">

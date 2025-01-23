@@ -98,6 +98,15 @@
                 <a href="{{ route('laporanseluruhsiswa') }}" class="btn btn-sm btn-warning">Reset</a>
             </div>
         @endif
+        
+        <div class="col">
+            <a class="btn btn-primary btn-sm" href="/laporansiswa/export_excel">
+                <i class="fas fa-file-excel"></i> Download Excel
+            </a>
+            {{-- <a class="btn btn-success btn-sm" href="index">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </a> --}}
+        </div>
 
         <div class="row">
             <div class="col-12 table-responsive">
