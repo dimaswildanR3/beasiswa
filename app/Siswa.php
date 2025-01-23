@@ -12,4 +12,9 @@ class Siswa extends Model
     
     protected $guarded = [];
 
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class, 'nis');
+    }
+
 }

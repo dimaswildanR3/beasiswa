@@ -22,4 +22,9 @@ class NilaiPelajaran extends Model
     {
         return $this->belongsTo(Siswa::class, 'nis');
     }
+
+     public function nilai()
+    {
+        return $this->belongsTo(Nilai::class, 'nis');
+    }
 }

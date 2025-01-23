@@ -19,6 +19,11 @@ class Beasiswa extends Model
       return $this->hasOne(kriteria::class, 'id_beasiswa');
         // return $this->hasOne('App\Kriteria');
       }
+
+      public function nilai()
+    {
+        return $this->hasMany(Nilai::class, 'id_beasiswa');
+    }
     //   public function CurhatanAudio(){
     //     return $this->hasOne(CurhatanAudio::class, 'id_curhatan');
     //     // return $this->belongsTo(CurhatanAudio::class, 'id_curhatan');

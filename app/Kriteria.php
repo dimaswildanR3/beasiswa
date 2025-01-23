@@ -26,4 +26,10 @@ class Kriteria extends Model
 //     public function beasiswa(){
 //     return $this->belongsTo('App\Beasiswa');
 // }
+
+public function model()
+{
+    return $this->belongsTo(Models::class, 'id_model');
+}
+
 }
