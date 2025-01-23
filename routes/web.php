@@ -39,13 +39,13 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::post('/penilaian/{id}/update', 'PenilaianController@update');
     Route::get('/penilaian/{id}/delete', 'PenilaianController@delete');
 
-    Route::get('/laporansiswa/index', 'PesyaratanController@indexx');
+    Route::get('/laporansiswa/index', 'PesyaratanController@indexx')->name('laporan');
     Route::get('/laporansiswa/index/cari', 'PesyaratanController@cari')->name('laporansiswa.index.cari');
     Route::get('/laporansiswa/export_excel', 'PesyaratanController@export_excel');
     Route::get('/perhitunganbeasiswa/index', 'PesyaratanController@indexxx')->name('perhitunganbeasiswa');
     Route::get('/perhitunganbeasiswa/export_excel', 'PesyaratanController@export_excell');
     Route::get('/pesyaratan/index', 'PesyaratanController@index')->name('pesyaratan');
-    Route::get('/laporasseluruh/index', 'PesyaratanController@indexxs');
+    Route::get('/laporasseluruh/index', 'PesyaratanController@indexxs')->name('laporanseluruhsiswa');
     Route::get('/laporasseluruh/index/cari', 'PesyaratanController@cari');
     Route::get('/pesyaratan/create', 'PesyaratanController@create');
     Route::get('/pesyaratan/{id}/show', 'PesyaratanController@show');

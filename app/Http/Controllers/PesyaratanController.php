@@ -86,55 +86,136 @@ public function indexxx(Request $request)
 
 
 
-    public function indexxs()
+    public function indexxs(Request $request)
     {
     
-        if(Auth::user()->level == 'admin') {
-            Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
-            return redirect()->to('/');
-        }
-        $Beasiswa = \App\Beasiswa::get();
-        // $Siswa = \App\Siswa::get();
-        $datas = \App\Nilai::get();
+        // if(Auth::user()->level == 'admin') {
+        //     Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
+        //     return redirect()->to('/');
+        // }
+        // $Beasiswa = \App\Beasiswa::get();
+        // // $Siswa = \App\Siswa::get();
+        // $datas = \App\Nilai::get();
+         // Cek apakah user adalah admin
+    if (Auth::user()->level == 'admin') {
+        Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
+        return redirect()->to('/');
+    }
+
+    // Ambil tahun unik dari tabel siswa (tahun masuk)
+    $tahunMasukList = Siswa::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+
+    // Ambil tahun pelajaran unik dari tabel nilaipelajaran
+    $tahunPelajaranList = Nilaipelajaran::distinct()->orderBy('tahun_pelajaran', 'desc')->pluck('tahun_pelajaran');
+
+    // Ambil jenis beasiswa unik dari tabel beasiswa
+    $jenisBeasiswaList = Beasiswa::distinct()->pluck('nama_beasiswa');
+
+    // Ambil tahun yang dipilih dari request (tahun masuk, tahun pelajaran, jenis beasiswa)
+    $tahunMasukDipilih = $request->get('tahun_masuk');
+    $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
+    $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
+
+    // Filter data berdasarkan tahun yang dipilih (tahun masuk, tahun pelajaran, jenis beasiswa)
+    $datas = Nilai::with('siswa')  // Eager load the siswa relationship
+        ->when($tahunMasukDipilih, function ($query) use ($tahunMasukDipilih) {
+            $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
+                $query->where('tahun', $tahunMasukDipilih); // Filter siswa by the selected year of entry
+            });
+        })
+        ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
+            $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
+                $query->where('tahun_pelajaran', $tahunPelajaranDipilih); // Filter nilaipelajaran by the selected academic year
+            });
+        })
+        ->when($jenisBeasiswaDipilih, function ($query) use ($jenisBeasiswaDipilih) {
+            $query->whereHas('beasiswa', function ($query) use ($jenisBeasiswaDipilih) {
+                $query->where('nama_beasiswa', $jenisBeasiswaDipilih); // Filter by the selected scholarship type
+            });
+        })
+        ->get();
+
+    // Ambil semua data beasiswa
+    $Beasiswa = Beasiswa::all();
         
-        return view('laporasseluruh.index', compact(['Beasiswa','datas','Beasiswa' => $Beasiswa,'datas' => $datas]));
+        return view('laporasseluruh.index', compact('Beasiswa', 'datas', 'tahunMasukList', 'tahunPelajaranList', 'jenisBeasiswaList', 'tahunMasukDipilih', 'tahunPelajaranDipilih', 'jenisBeasiswaDipilih'));
     }
-public function carii(Request $request)
-    {
-        $cari = $request->cari;
-        $Beasiswa = Beasiswa::all(); // Ambil semua beasiswa
-        $tahunList = Siswa::select('tahun')->distinct()->get(); // Ambil tahun unik untuk dropdown
+// public function carii(Request $request)
+//     {
+//         $cari = $request->cari;
+//         $Beasiswa = Beasiswa::all(); // Ambil semua beasiswa
+//         $tahunList = Siswa::select('tahun')->distinct()->get(); // Ambil tahun unik untuk dropdown
 
-        $datas = Siswa::when($cari, function ($query, $cari) {
-            return $query->where('tahun', 'like', "%{$cari}%");
-        })->paginate(10);
+//         $datas = Siswa::when($cari, function ($query, $cari) {
+//             return $query->where('tahun', 'like', "%{$cari}%");
+//         })->paginate(10);
 
-        return view('laporasseluruh.index', compact('datas', 'cari', 'Beasiswa', 'tahunList'));
-    }
+//         return view('laporasseluruh.index', compact('datas', 'cari', 'Beasiswa', 'tahunList'));
+//     }
     public function indexx(Request $request)
     {
-        // Cek level user untuk memastikan hanya user selain admin yang dapat mengakses
+        // // Cek level user untuk memastikan hanya user selain admin yang dapat mengakses
+        // if (Auth::user()->level == 'admin') {
+        //     Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
+        //     return redirect()->to('/');
+        // }
+    
+        // // Ambil data siswa dan nilai
+        // $siswa = Siswa::get();
+        // $datas = Nilai::get();
+    
+        // // Ambil data Beasiswa
+        // $Beasiswa = \App\Beasiswa::get();
+    
+        // // Cek apakah ada filter tahun yang dipilih dari form
+        // if ($request->has('tahun') && $request->tahun != '') {
+        //     // Filter data siswa berdasarkan tahun
+        //     $siswa = Siswa::where('tahun', $request->tahun)->get();
+        //     $datas = Nilai::whereIn('nis', $siswa->pluck('nis'))->get(); // Mengambil nilai yang sesuai dengan siswa yang difilter berdasarkan tahun
+        // }
+    
         if (Auth::user()->level == 'admin') {
             Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
             return redirect()->to('/');
         }
     
-        // Ambil data siswa dan nilai
-        $siswa = Siswa::get();
-        $datas = Nilai::get();
+        // Ambil tahun unik dari tabel siswa (tahun masuk)
+        $tahunMasukList = Siswa::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
     
-        // Ambil data Beasiswa
-        $Beasiswa = \App\Beasiswa::get();
+        // Ambil tahun pelajaran unik dari tabel nilaipelajaran
+        $tahunPelajaranList = Nilaipelajaran::distinct()->orderBy('tahun_pelajaran', 'desc')->pluck('tahun_pelajaran');
     
-        // Cek apakah ada filter tahun yang dipilih dari form
-        if ($request->has('tahun') && $request->tahun != '') {
-            // Filter data siswa berdasarkan tahun
-            $siswa = Siswa::where('tahun', $request->tahun)->get();
-            $datas = Nilai::whereIn('nis', $siswa->pluck('nis'))->get(); // Mengambil nilai yang sesuai dengan siswa yang difilter berdasarkan tahun
-        }
+        // Ambil jenis beasiswa unik dari tabel beasiswa
+        $jenisBeasiswaList = Beasiswa::distinct()->pluck('nama_beasiswa');
     
+        // Ambil tahun yang dipilih dari request (tahun masuk, tahun pelajaran, jenis beasiswa)
+        $tahunMasukDipilih = $request->get('tahun_masuk');
+        $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
+        $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
+    
+        // Filter data berdasarkan tahun yang dipilih (tahun masuk, tahun pelajaran, jenis beasiswa)
+        $datas = Nilai::with('siswa')  // Eager load the siswa relationship
+            ->when($tahunMasukDipilih, function ($query) use ($tahunMasukDipilih) {
+                $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
+                    $query->where('tahun', $tahunMasukDipilih); // Filter siswa by the selected year of entry
+                });
+            })
+            ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
+                $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
+                    $query->where('tahun_pelajaran', $tahunPelajaranDipilih); // Filter nilaipelajaran by the selected academic year
+                });
+            })
+            ->when($jenisBeasiswaDipilih, function ($query) use ($jenisBeasiswaDipilih) {
+                $query->whereHas('beasiswa', function ($query) use ($jenisBeasiswaDipilih) {
+                    $query->where('nama_beasiswa', $jenisBeasiswaDipilih); // Filter by the selected scholarship type
+                });
+            })
+            ->get();
+    
+        // Ambil semua data beasiswa
+        $Beasiswa = Beasiswa::all();
         // Kirimkan data ke view
-        return view('laporansiswa.index', compact('Beasiswa', 'datas', 'siswa'));
+        return view('laporansiswa.index', compact('Beasiswa', 'datas', 'tahunMasukList', 'tahunPelajaranList', 'jenisBeasiswaList', 'tahunMasukDipilih', 'tahunPelajaranDipilih', 'jenisBeasiswaDipilih'));
     }
     
 public function cari(Request $request)
