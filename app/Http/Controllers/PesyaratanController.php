@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models;
 use App\Nilai;
 use App\Beasiswa;
 use App\Siswa;
@@ -38,121 +39,102 @@ class PesyaratanController extends Controller
     }
 
     
-public function indeex(Request $request)
-{
-    // Cek apakah user adalah admin
-    if (Auth::user()->level == 'admin') {
-        Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
-        return redirect()->to('/');
-    }
-
-    // Ambil tahun unik dari tabel siswa (tahun masuk)
-    $tahunMasukList = Siswa::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
-
-    // Ambil tahun pelajaran unik dari tabel nilaipelajaran
-    $tahunPelajaranList = NilaiPelajaran::distinct()->orderBy('tahun_pelajaran', 'desc')->pluck('tahun_pelajaran');
-
-    // Ambil jenis beasiswa unik dari tabel beasiswa
-    $jenisBeasiswaList = Beasiswa::distinct()->pluck('nama_beasiswa');
-
-    // Ambil tahun yang dipilih dari request
-    $tahunMasukDipilih = $request->get('tahun_masuk');
-    $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
-    $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
-
-    // Filter data berdasarkan tahun yang dipilih
-    $datas = Nilai::with(['siswa', 'beasiswa', 'nilaipelajaran'])
-        ->when($tahunMasukDipilih, function ($query) use ($tahunMasukDipilih) {
-            $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
-                $query->where('tahun', $tahunMasukDipilih);
-            });
-        })
-        ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
-            $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
-                $query->where('tahun_pelajaran', $tahunPelajaranDipilih);
-            });
-        })
-        ->when($jenisBeasiswaDipilih, function ($query) use ($jenisBeasiswaDipilih) {
-            $query->whereHas('beasiswa', function ($query) use ($jenisBeasiswaDipilih) {
-                $query->where('nama_beasiswa', $jenisBeasiswaDipilih);
-            });
-        })
-        ->get();
-
-    // Ambil semua data beasiswa
-    $beasiswa = Beasiswa::all();
-
-    // === Proses Perhitungan SAW ===
-
-    // Ambil data siswa dan kriteria
-    $siswa = Siswa::all();
-    $kriteria = Kriteria::with('model')->get();
-
-    // Normalisasi: Hitung nilai maksimum dan minimum untuk normalisasi
-    $maxValues = [];
-    $minValues = [];
-
-    // Hitung nilai maksimum dan minimum untuk normalisasi
-    foreach ($kriteria as $k) {
-        if ($k->sifat == 'Benefit') {
-            $maxValues[$k->id] = Nilai::where('id_kriteria', $k->id)->max('nilai');
-        } else {
-            $minValues[$k->id] = Nilai::where('id_kriteria', $k->id)->min('nilai');
+    public function indeex(Request $request)
+    {
+        // Cek apakah user adalah admin
+        if (Auth::user()->level == 'admin') {
+            Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
+            return redirect()->to('/');
         }
-    }
-
-    // Normalisasi dan hitung nilai preferensi
-    foreach ($siswa as $s) {
-    $totalPreferensi = 0;
-
-    foreach ($kriteria as $k) {
-        $nilai = Nilai::where('nis', $s->nis)
-                       ->where('id_kriteria', $k->id)
-                       ->value('nilai') ?? 0;
-
-        // Normalisasi berdasarkan sifat kriteria
-        if ($k->sifat == 'Benefit') {
-            // Cek jika nilai maksimum adalah 0 untuk menghindari pembagian dengan 0
-            $normalizedValue = $maxValues[$k->id] != 0 ? $nilai / $maxValues[$k->id] : 0;
-        } else {
-            // Cek jika nilai minimum adalah 0 untuk menghindari pembagian dengan 0
-            $normalizedValue = $nilai != 0 ? $minValues[$k->id] / $nilai : 0;
+    
+        // Ambil tahun unik dari tabel siswa (tahun masuk)
+        $tahunMasukList = Siswa::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+    
+        // Ambil tahun pelajaran unik dari tabel nilaipelajaran
+        $tahunPelajaranList = NilaiPelajaran::select('tahun_pelajaran')->distinct()->orderBy('tahun_pelajaran', 'desc')->pluck('tahun_pelajaran');
+    
+        // Ambil jenis beasiswa unik dari tabel beasiswa
+        $jenisBeasiswaList = Beasiswa::select('nama_beasiswa')->distinct()->pluck('nama_beasiswa');
+    
+        // Ambil tahun yang dipilih dari request
+        $tahunMasukDipilih = $request->get('tahun_masuk');
+        $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
+        $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
+    
+        // Filter data siswa berdasarkan input
+        $siswaQuery = Nilai::with(['siswa', 'beasiswa', 'nilaipelajaran'])
+            ->when($tahunMasukDipilih, function ($query) use ($tahunMasukDipilih) {
+                $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
+                    $query->where('tahun', $tahunMasukDipilih);
+                });
+            })
+            ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
+                $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
+                    $query->where('tahun_pelajaran', $tahunPelajaranDipilih);
+                });
+            })
+            ->when($jenisBeasiswaDipilih, function ($query) use ($jenisBeasiswaDipilih) {
+                $query->whereHas('beasiswa', function ($query) use ($jenisBeasiswaDipilih) {
+                    $query->where('nama_beasiswa', $jenisBeasiswaDipilih);
+                });
+            });
+    
+        $siswa = $siswaQuery->get();
+    
+        // Ambil semua data beasiswa
+        $beasiswa = Beasiswa::all();
+    
+        // === Proses Perhitungan SAW ===
+        $kriteria = Kriteria::with('model')->get();
+        $maxValues = [];
+        $minValues = [];
+    
+        foreach ($kriteria as $k) {
+            if ($k->sifat == 'Benefit') {
+                $maxValues[$k->id] = Nilai::where('id_kriteria', $k->id)->max('nilai');
+            } else {
+                $minValues[$k->id] = Nilai::where('id_kriteria', $k->id)->min('nilai');
+            }
         }
-
-        // Cek apakah $k->model ada dan memiliki properti bobot
-        if ($k->model && isset($k->model->bobot)) {
-            // Hitung nilai preferensi jika bobot ada
-            $totalPreferensi += $normalizedValue * $k->model->bobot;
-        } else {
-            // Tangani kasus ketika model atau bobot tidak ada
-            $totalPreferensi += $normalizedValue * 0; // atau nilai default lainnya
+    
+        // Normalisasi dan hitung nilai preferensi
+        foreach ($siswa as $s) {
+            $totalPreferensi = 0;
+    
+            foreach ($kriteria as $k) {
+                $nilai = Nilai::where('nis', $s->siswa->id)
+                              ->where('id_kriteria', $k->id)
+                              ->value('nilai') ?? 0;
+    
+                if ($k->sifat == 'Benefit') {
+                    $normalizedValue = $maxValues[$k->id] != 0 ? $nilai / $maxValues[$k->id] : 0;
+                } else {
+                    $normalizedValue = $nilai != 0 ? $minValues[$k->id] / $nilai : 0;
+                }
+    
+                $model = Models::where('id_kriteria', $k->id)->first();
+    
+                if ($model && isset($model->bobot)) {
+                    $totalPreferensi += $normalizedValue * $model->bobot;
+                }
+            }
+    
+            $s->nilai_preferensi = $totalPreferensi;
         }
+    
+        // Urutkan berdasarkan nilai preferensi
+        $siswa = $siswa->sortByDesc('nilai_preferensi')->values();
+    
+        return view('perhitunganbeasiswa.index', compact(
+            'beasiswa', 'tahunMasukList', 'tahunPelajaranList', 'jenisBeasiswaList',
+            'tahunMasukDipilih', 'tahunPelajaranDipilih', 'jenisBeasiswaDipilih', 'siswa'
+        ));
     }
-
-    $s->nilai_preferensi = $totalPreferensi;
-}
+    
 
 
 
-    // Urutkan hasil berdasarkan nilai preferensi
-    $siswa = $siswa->sortByDesc('nilai_preferensi');
-
-    return view('perhitunganbeasiswa.index', compact('beasiswa', 'datas', 'tahunMasukList', 'tahunPelajaranList', 'jenisBeasiswaList', 'tahunMasukDipilih', 'tahunPelajaranDipilih', 'jenisBeasiswaDipilih', 'siswa'));
-}
-
-
-
-
-<<<<<<< HEAD
     public function indexxs(Request $request)
-=======
-
-
-
-
-
-    public function indexxs()
->>>>>>> f83154f430c9230c7c57c8160760f58524c805c7
     {
     
         // if(Auth::user()->level == 'admin') {
@@ -163,7 +145,9 @@ public function indeex(Request $request)
         // // $Siswa = \App\Siswa::get();
         // $datas = \App\Nilai::get();
          // Cek apakah user adalah admin
-    if (Auth::user()->level == 'admin') {
+     // Cek apakah user adalah admin
+      // Cek apakah user adalah admin
+      if (Auth::user()->level == 'admin') {
         Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
         return redirect()->to('/');
     }
@@ -172,39 +156,82 @@ public function indeex(Request $request)
     $tahunMasukList = Siswa::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
 
     // Ambil tahun pelajaran unik dari tabel nilaipelajaran
-    $tahunPelajaranList = Nilaipelajaran::distinct()->orderBy('tahun_pelajaran', 'desc')->pluck('tahun_pelajaran');
+    $tahunPelajaranList = NilaiPelajaran::select('tahun_pelajaran')->distinct()->orderBy('tahun_pelajaran', 'desc')->pluck('tahun_pelajaran');
 
     // Ambil jenis beasiswa unik dari tabel beasiswa
-    $jenisBeasiswaList = Beasiswa::distinct()->pluck('nama_beasiswa');
+    $jenisBeasiswaList = Beasiswa::select('nama_beasiswa')->distinct()->pluck('nama_beasiswa');
 
-    // Ambil tahun yang dipilih dari request (tahun masuk, tahun pelajaran, jenis beasiswa)
+    // Ambil tahun yang dipilih dari request
     $tahunMasukDipilih = $request->get('tahun_masuk');
     $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
     $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
 
-    // Filter data berdasarkan tahun yang dipilih (tahun masuk, tahun pelajaran, jenis beasiswa)
-    $datas = Nilai::with('siswa')  // Eager load the siswa relationship
-        ->when($tahunMasukDipilih, function ($query) use ($tahunMasukDipilih) {
-            $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
-                $query->where('tahun', $tahunMasukDipilih); // Filter siswa by the selected year of entry
-            });
-        })
-        ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
-            $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
-                $query->where('tahun_pelajaran', $tahunPelajaranDipilih); // Filter nilaipelajaran by the selected academic year
-            });
-        })
-        ->when($jenisBeasiswaDipilih, function ($query) use ($jenisBeasiswaDipilih) {
-            $query->whereHas('beasiswa', function ($query) use ($jenisBeasiswaDipilih) {
-                $query->where('nama_beasiswa', $jenisBeasiswaDipilih); // Filter by the selected scholarship type
-            });
-        })
-        ->get();
+    // Filter data siswa berdasarkan input
+    $siswaQuery = Nilai::with(['siswa', 'beasiswa', 'nilaipelajaran'])
+    ->whereHas('beasiswa', function ($query) {
+        $query->where('id', 2); // Hanya tampilkan beasiswa dengan id 2
+    })
+    ->when($tahunMasukDipilih, function ($query) use ($tahunMasukDipilih) {
+        $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
+            $query->where('tahun', $tahunMasukDipilih);
+        });
+    })
+    ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
+        $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
+            $query->where('tahun_pelajaran', $tahunPelajaranDipilih);
+        });
+    });
+
+$siswa = $siswaQuery->get();
+
 
     // Ambil semua data beasiswa
-    $Beasiswa = Beasiswa::all();
-        
-        return view('laporasseluruh.index', compact('Beasiswa', 'datas', 'tahunMasukList', 'tahunPelajaranList', 'jenisBeasiswaList', 'tahunMasukDipilih', 'tahunPelajaranDipilih', 'jenisBeasiswaDipilih'));
+    $beasiswa = Beasiswa::all();
+
+    // === Proses Perhitungan SAW ===
+    $kriteria = Kriteria::with('model')->get();
+    $maxValues = [];
+    $minValues = [];
+
+    foreach ($kriteria as $k) {
+        if ($k->sifat == 'Benefit') {
+            $maxValues[$k->id] = Nilai::where('id_kriteria', $k->id)->max('nilai');
+        } else {
+            $minValues[$k->id] = Nilai::where('id_kriteria', $k->id)->min('nilai');
+        }
+    }
+
+    // Normalisasi dan hitung nilai preferensi
+    foreach ($siswa as $s) {
+        $totalPreferensi = 0;
+
+        foreach ($kriteria as $k) {
+            $nilai = Nilai::where('nis', $s->siswa->id)
+                          ->where('id_kriteria', $k->id)
+                          ->value('nilai') ?? 0;
+
+            if ($k->sifat == 'Benefit') {
+                $normalizedValue = $maxValues[$k->id] != 0 ? $nilai / $maxValues[$k->id] : 0;
+            } else {
+                $normalizedValue = $nilai != 0 ? $minValues[$k->id] / $nilai : 0;
+            }
+
+            $model = Models::where('id_kriteria', $k->id)->first();
+
+            if ($model && isset($model->bobot)) {
+                $totalPreferensi += $normalizedValue * $model->bobot;
+            }
+        }
+
+        $s->nilai_preferensi = $totalPreferensi;
+    }
+
+    // Urutkan berdasarkan nilai preferensi
+    $siswa = $siswa->sortByDesc('nilai_preferensi')->values();
+
+        // var_dump($siswa);
+        // die;
+        return view('laporasseluruh.index',  compact('beasiswa',  'tahunMasukList', 'tahunPelajaranList', 'jenisBeasiswaList', 'tahunMasukDipilih', 'tahunPelajaranDipilih', 'jenisBeasiswaDipilih', 'siswa'));
     }
 // public function carii(Request $request)
 //     {
@@ -219,7 +246,7 @@ public function indeex(Request $request)
 //         return view('laporasseluruh.index', compact('datas', 'cari', 'Beasiswa', 'tahunList'));
 //     }
     public function indexx(Request $request)
-<<<<<<< HEAD
+
     {
         // // Cek level user untuk memastikan hanya user selain admin yang dapat mengakses
         // if (Auth::user()->level == 'admin') {
@@ -240,112 +267,156 @@ public function indeex(Request $request)
         //     $siswa = Siswa::where('tahun', $request->tahun)->get();
         //     $datas = Nilai::whereIn('nis', $siswa->pluck('nis'))->get(); // Mengambil nilai yang sesuai dengan siswa yang difilter berdasarkan tahun
         // }
-    
-        if (Auth::user()->level == 'admin') {
-            Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
-            return redirect()->to('/');
-        }
-    
-        // Ambil tahun unik dari tabel siswa (tahun masuk)
-        $tahunMasukList = Siswa::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
-    
-        // Ambil tahun pelajaran unik dari tabel nilaipelajaran
-        $tahunPelajaranList = Nilaipelajaran::distinct()->orderBy('tahun_pelajaran', 'desc')->pluck('tahun_pelajaran');
-    
-        // Ambil jenis beasiswa unik dari tabel beasiswa
-        $jenisBeasiswaList = Beasiswa::distinct()->pluck('nama_beasiswa');
-    
-        // Ambil tahun yang dipilih dari request (tahun masuk, tahun pelajaran, jenis beasiswa)
-        $tahunMasukDipilih = $request->get('tahun_masuk');
-        $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
-        $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
-    
-        // Filter data berdasarkan tahun yang dipilih (tahun masuk, tahun pelajaran, jenis beasiswa)
-        $datas = Nilai::with('siswa')  // Eager load the siswa relationship
-            ->when($tahunMasukDipilih, function ($query) use ($tahunMasukDipilih) {
-                $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
-                    $query->where('tahun', $tahunMasukDipilih); // Filter siswa by the selected year of entry
-                });
-            })
-            ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
-                $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
-                    $query->where('tahun_pelajaran', $tahunPelajaranDipilih); // Filter nilaipelajaran by the selected academic year
-                });
-            })
-            ->when($jenisBeasiswaDipilih, function ($query) use ($jenisBeasiswaDipilih) {
-                $query->whereHas('beasiswa', function ($query) use ($jenisBeasiswaDipilih) {
-                    $query->where('nama_beasiswa', $jenisBeasiswaDipilih); // Filter by the selected scholarship type
-                });
-            })
-            ->get();
-    
-        // Ambil semua data beasiswa
-        $Beasiswa = Beasiswa::all();
-        // Kirimkan data ke view
-        return view('laporansiswa.index', compact('Beasiswa', 'datas', 'tahunMasukList', 'tahunPelajaranList', 'jenisBeasiswaList', 'tahunMasukDipilih', 'tahunPelajaranDipilih', 'jenisBeasiswaDipilih'));
-=======
-{
-    // Cek level user untuk memastikan hanya user selain admin yang dapat mengakses
-    if (Auth::user()->level == 'admin') {
+      // Cek apakah user adalah admin
+      if (Auth::user()->level == 'admin') {
         Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
         return redirect()->to('/');
->>>>>>> f83154f430c9230c7c57c8160760f58524c805c7
     }
 
-    // Ambil data siswa dan nilai
-    $siswa = Siswa::get();
-    $datas = Nilai::get();
+    // Ambil tahun unik dari tabel siswa (tahun masuk)
+    $tahunMasukList = Siswa::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
 
-    // Ambil data Beasiswa
-    $Beasiswa = \App\Beasiswa::get();
+    // Ambil tahun pelajaran unik dari tabel nilaipelajaran
+    $tahunPelajaranList = NilaiPelajaran::select('tahun_pelajaran')->distinct()->orderBy('tahun_pelajaran', 'desc')->pluck('tahun_pelajaran');
 
-    // Ambil data tahun untuk dropdown
-    $tahunOptions = Siswa::select('tahun')->distinct()->get(); // Fetch unique years
+    // Ambil jenis beasiswa unik dari tabel beasiswa
+    $jenisBeasiswaList = Beasiswa::select('nama_beasiswa')->distinct()->pluck('nama_beasiswa');
 
-    // Cek apakah ada filter tahun yang dipilih dari form
-    if ($request->has('tahun') && $request->tahun != '') {
-        // Filter data siswa berdasarkan tahun
-        $siswa = Siswa::where('tahun', $request->tahun)->get();
-        $datas = Nilai::whereIn('nis', $siswa->pluck('nis'))->get(); // Mengambil nilai yang sesuai dengan siswa yang difilter berdasarkan tahun
+    // Ambil tahun yang dipilih dari request
+    $tahunMasukDipilih = $request->get('tahun_masuk');
+    $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
+    $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
+
+    // Filter data siswa berdasarkan input
+    $siswaQuery = Nilai::with(['siswa', 'beasiswa', 'nilaipelajaran'])
+    ->whereHas('beasiswa', function ($query) {
+        $query->where('id', 1); 
+    })
+    ->when($tahunMasukDipilih, function ($query) use ($tahunMasukDipilih) {
+        $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
+            $query->where('tahun', $tahunMasukDipilih);
+        });
+    })
+    ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
+        $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
+            $query->where('tahun_pelajaran', $tahunPelajaranDipilih);
+        });
+    });
+
+$siswa = $siswaQuery->get();
+
+
+    // Ambil semua data beasiswa
+    $beasiswa = Beasiswa::all();
+
+    // === Proses Perhitungan SAW ===
+    $kriteria = Kriteria::with('model')->get();
+    $maxValues = [];
+    $minValues = [];
+
+    foreach ($kriteria as $k) {
+        if ($k->sifat == 'Benefit') {
+            $maxValues[$k->id] = Nilai::where('id_kriteria', $k->id)->max('nilai');
+        } else {
+            $minValues[$k->id] = Nilai::where('id_kriteria', $k->id)->min('nilai');
+        }
     }
 
-    // Kirimkan data ke view
-    return view('laporansiswa.index', compact('Beasiswa', 'datas', 'siswa', 'tahunOptions'));
+    // Normalisasi dan hitung nilai preferensi
+    foreach ($siswa as $s) {
+        $totalPreferensi = 0;
+
+        foreach ($kriteria as $k) {
+            $nilai = Nilai::where('nis', $s->siswa->id)
+                          ->where('id_kriteria', $k->id)
+                          ->value('nilai') ?? 0;
+
+            if ($k->sifat == 'Benefit') {
+                $normalizedValue = $maxValues[$k->id] != 0 ? $nilai / $maxValues[$k->id] : 0;
+            } else {
+                $normalizedValue = $nilai != 0 ? $minValues[$k->id] / $nilai : 0;
+            }
+
+            $model = Models::where('id_kriteria', $k->id)->first();
+
+            if ($model && isset($model->bobot)) {
+                $totalPreferensi += $normalizedValue * $model->bobot;
+            }
+        }
+
+        $s->nilai_preferensi = $totalPreferensi;
+    }
+
+    // Urutkan berdasarkan nilai preferensi
+    $siswa = $siswa->sortByDesc('nilai_preferensi')->values();
+
+            
+        // Kirimkan data ke view
+        return view('laporansiswa.index',  compact('beasiswa','tahunMasukList', 'tahunPelajaranList', 'jenisBeasiswaList', 'tahunMasukDipilih', 'tahunPelajaranDipilih', 'jenisBeasiswaDipilih', 'siswa'));
+
+// {
+//     // Cek level user untuk memastikan hanya user selain admin yang dapat mengakses
+//     if (Auth::user()->level == 'admin') {
+//         Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
+//         return redirect()->to('/');
+
+//     }
+
+//     // Ambil data siswa dan nilai
+//     $siswa = Siswa::get();
+//     $datas = Nilai::get();
+
+//     // Ambil data Beasiswa
+//     $Beasiswa = \App\Beasiswa::get();
+
+//     // Ambil data tahun untuk dropdown
+//     $tahunOptions = Siswa::select('tahun')->distinct()->get(); // Fetch unique years
+
+//     // Cek apakah ada filter tahun yang dipilih dari form
+//     if ($request->has('tahun') && $request->tahun != '') {
+//         // Filter data siswa berdasarkan tahun
+//         $siswa = Siswa::where('tahun', $request->tahun)->get();
+//         $datas = Nilai::whereIn('nis', $siswa->pluck('nis'))->get(); // Mengambil nilai yang sesuai dengan siswa yang difilter berdasarkan tahun
+//     }
+
+//     // Kirimkan data ke view
+//     return view('laporansiswa.index', compact('Beasiswa', 'datas', 'siswa', 'tahunOptions'));
+// }
 }
 
     
-public function cari(Request $request)
-{
-    $cari = $request->input('cari'); // ID siswa yang dipilih
-    $tahun = $request->input('tahun'); // Tahun yang dipilih
+// public function cari(Request $request)
+// {
+//     $cari = $request->input('cari'); // ID siswa yang dipilih
+//     $tahun = $request->input('tahun'); // Tahun yang dipilih
 
-    // Ambil data Beasiswa dan Siswa
-    $Beasiswa = Beasiswa::all();
-    $siswa = Siswa::all();
+//     // Ambil data Beasiswa dan Siswa
+//     $Beasiswa = Beasiswa::all();
+//     $siswa = Siswa::all();
 
-    // Query untuk Nilai
-    $query = Nilai::query();
+//     // Query untuk Nilai
+//     $query = Nilai::query();
 
-    // Filter berdasarkan siswa jika ada filter siswa
-    if (!empty($cari)) {
-        $query->whereHas('siswa', function ($q) use ($cari) {
-            $q->where('id', $cari); // Cari berdasarkan ID siswa
-        });
-    }
+//     // Filter berdasarkan siswa jika ada filter siswa
+//     if (!empty($cari)) {
+//         $query->whereHas('siswa', function ($q) use ($cari) {
+//             $q->where('id', $cari); // Cari berdasarkan ID siswa
+//         });
+//     }
 
-    // Filter berdasarkan tahun jika ada filter tahun
-    if (!empty($tahun)) {
-        $query->whereHas('siswa', function ($q) use ($tahun) {
-            $q->where('tahun', $tahun); // Filter berdasarkan tahun siswa
-        });
-    }
+//     // Filter berdasarkan tahun jika ada filter tahun
+//     if (!empty($tahun)) {
+//         $query->whereHas('siswa', function ($q) use ($tahun) {
+//             $q->where('tahun', $tahun); // Filter berdasarkan tahun siswa
+//         });
+//     }
 
-    // Ambil data Nilai yang sudah difilter
-    $datas = $query->paginate(10);
+//     // Ambil data Nilai yang sudah difilter
+//     $datas = $query->paginate(10);
 
-    // Kembalikan tampilan dengan data yang sudah difilter
-    return view('laporansiswa.index', compact('datas', 'cari', 'Beasiswa', 'tahun', 'siswa'));
-}
+//     // Kembalikan tampilan dengan data yang sudah difilter
+//     return view('laporansiswa.index', compact('datas', 'cari', 'Beasiswa', 'tahun', 'siswa'));
+// }
 
 
     
@@ -583,7 +654,7 @@ if (!$nilaibro) {
     //     }
         public function export_excelll()
         {
-            return Excel::download(new LaporandaftarExport, 'laporanpendaftaran.xlsx');
+            return Excel::download(new LaporandaftarExport, 'Laporan Beasiswa Berprestasi (BP).xlsx');
         }
         public function export_excell()
         {
@@ -591,7 +662,7 @@ if (!$nilaibro) {
         }
         public function export_excel()
         {
-            return Excel::download(new LaporansiswaExport, 'laporansiswa.xlsx');
+            return Excel::download(new LaporansiswaExport, ' Laporan Beasiswa Kurang Mampu (BKM).xlsx');
         }
 }
 

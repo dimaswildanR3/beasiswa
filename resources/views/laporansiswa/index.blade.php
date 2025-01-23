@@ -45,7 +45,7 @@
         </div>
 
         <!-- Filter Tahun Masuk, Tahun Pelajaran, and Jenis Beasiswa -->
-        <form method="GET" action="{{ route('laporanseluruhsiswa') }}">
+        <form method="GET" action="{{ route('laporansiswa') }}">
             <div class="row">
                 <div class="col-md-4">
                     <label for="tahun_masuk">Filter Tahun Masuk:</label>
@@ -65,7 +65,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-4">
+                {{-- <div class="col-md-4">
                     <label for="jenis_beasiswa">Filter Jenis Beasiswa:</label>
                     <select name="jenis_beasiswa" id="jenis_beasiswa" class="form-control" onchange="this.form.submit()">
                         <option value="">-- Pilih Jenis Beasiswa --</option>
@@ -73,7 +73,7 @@
                             <option value="{{ $beasiswa }}" {{ request('jenis_beasiswa') == $beasiswa ? 'selected' : '' }}>{{ $beasiswa }}</option>
                         @endforeach
                     </select>
-                </div>
+                </div> --}}
             </div>
         </form>
 
@@ -95,7 +95,7 @@
                     dan Jenis Beasiswa <strong>{{ request('jenis_beasiswa') }}</strong>
                 @endif
                 . 
-                <a href="{{ route('laporanseluruhsiswa') }}" class="btn btn-sm btn-warning">Reset</a>
+                <a href="{{ route('laporansiswa') }}" class="btn btn-sm btn-warning">Reset</a>
             </div>
         @endif
         
@@ -115,33 +115,37 @@
                         <tr class="bg-light">
                             <th>NIS</th>
                             <th><div style="width:110px;">Nama</div></th>
-                            <th><div style="width:110px;">Tahun Angkatan</div></th>
-                            <th><div style="width:110px;">Nilai Preferensi</div></th>
-                           
+                            <th><div style="width:110px;">Tahun</div></th>
+                            <th>Nilai Preferensi</th>
+                            {{-- <th>Total Perhitungan Bobot Beasiswa Yayasan</th>
+                            <th>Total Perhitungan Bobot Beasiswa Orang Tua Asuh</th> --}}
                         </tr>
                     </thead>
                     <tbody>
-                       @foreach($datas as $siswa)
+                       @foreach($siswa as $siswas)
                         <tr>
-                            <td>{{ $siswa->siswa->nis }}</td>
-                            <td>{{ $siswa->siswa->nama }}</td>
-                            <td>{{ $siswa->siswa->tahun }}</td>
+                            {{-- @php
+                                var_dump($siswas);
+                            @endphp --}}
+                            <td>{{ $siswas->siswa->nis }}</td>
+                            <td>{{ $siswas->siswa->nama }}</td>
+                            <td>{{ $siswas->siswa->tahun }}</td>
 
                             <td>
                                 @php
-                                    $bobot_kepala = $siswa->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');
+                                    $bobot_kepala = $siswas->nilai_preferensi;
                                 @endphp
                                 {{ $bobot_kepala }}
                             </td>
                             {{-- <td>
                                 @php
-                                    $bobot_yayasan = $siswa->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');
+                                    $bobot_yayasan = $siswas->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');
                                 @endphp
                                 {{ $bobot_yayasan }}
                             </td>
                             <td>
                                 @php
-                                    $bobot_orang_tua_asuh = $siswa->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');
+                                    $bobot_orang_tua_asuh = $siswas->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');
                                 @endphp
                                 {{ $bobot_orang_tua_asuh }}
                             </td> --}}

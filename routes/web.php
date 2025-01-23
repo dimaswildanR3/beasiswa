@@ -39,24 +39,25 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::post('/penilaian/{id}/update', 'PenilaianController@update');
     Route::get('/penilaian/{id}/delete', 'PenilaianController@delete');
 
-<<<<<<< HEAD
-    Route::get('/laporansiswa/index', 'PesyaratanController@indexx')->name('laporan');
-=======
-    Route::get('/laporansiswa/index', 'PesyaratanController@indexx')->name('laporan.index');
->>>>>>> f83154f430c9230c7c57c8160760f58524c805c7
+
+    // Route::get('/laporansiswa/index', 'PesyaratanController@indexx')->name('laporan');
+
+    Route::get('/laporansiswa/index', 'PesyaratanController@indexx')->name('laporansiswa');
+
     Route::get('/laporansiswa/index/cari', 'PesyaratanController@cari')->name('laporansiswa.index.cari');
     Route::get('/laporansiswa/export_excel', 'PesyaratanController@export_excel');
+    Route::get('/laporasseluruh/export_excel', 'PesyaratanController@export_excelll');
     Route::get('/perhitunganbeasiswa/index', 'PesyaratanController@indeex')->name('perhitunganbeasiswa');
     Route::get('/perhitunganbeasiswa/export_excel', 'PesyaratanController@export_excell');
     Route::get('/pesyaratan/index', 'PesyaratanController@index')->name('pesyaratan');
     Route::get('/laporasseluruh/index', 'PesyaratanController@indexxs')->name('laporanseluruhsiswa');
     Route::get('/laporasseluruh/index/cari', 'PesyaratanController@cari');
-    Route::get('/pesyaratan/create', 'PesyaratanController@create');
+    Route::get('/pesyaratan/create', 'PesyaratanController@create')->name('pesyaratan.create');
     Route::get('/pesyaratan/{id}/show', 'PesyaratanController@show');
     Route::post('/pesyaratan/store', 'PesyaratanController@store');
-    Route::get('/pesyaratan/{id}/edit', 'PesyaratanController@edit');
+    Route::get('/pesyaratan/{id}/edit', 'PesyaratanController@edit')->name('pesyaratan.edit');
     Route::post('/pesyaratan/{id}/update', 'PesyaratanController@update');
-    Route::get('/pesyaratan/{id}/delete', 'PesyaratanController@delete');
+    Route::get('/pesyaratan/{id}/delete', 'PesyaratanController@delete')->name('pesyaratan.destroy');
 
     Route::get('/models/index', 'ModelsController@index')->name('models');
     Route::get('/models/create', 'ModelsController@create');

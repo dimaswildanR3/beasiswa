@@ -65,7 +65,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-4">
+                {{-- <div class="col-md-4">
                     <label for="jenis_beasiswa">Filter Jenis Beasiswa:</label>
                     <select name="jenis_beasiswa" id="jenis_beasiswa" class="form-control" onchange="this.form.submit()">
                         <option value="">-- Pilih Jenis Beasiswa --</option>
@@ -73,7 +73,7 @@
                             <option value="{{ $beasiswa }}" {{ request('jenis_beasiswa') == $beasiswa ? 'selected' : '' }}>{{ $beasiswa }}</option>
                         @endforeach
                     </select>
-                </div>
+                </div> --}}
             </div>
         </form>
 
@@ -100,56 +100,60 @@
         @endif
          <div class="col">
                 {{-- <button type="submit" class="btn btn-primary btn-sm my-1 mr-sm-1 "><i class="fas fa-print"></i> Cetak</button>             --}}
-                <a class="btn btn-success btn-sm my-1 mr-sm-1 " href="/laporansiswa/export_excel" role="button"><i class="fas fa-file-excel"></i> Download Excel</a>
+                <a class="btn btn-success btn-sm my-1 mr-sm-1 " href="/laporasseluruh/export_excel" role="button"><i class="fas fa-file-excel"></i> Download Excel</a>
                 {{-- <a class="btn btn-success btn-sm my-1 mr-sm-1 " href="index" role="button"><i class="fas fa-sync-alt"></i> Refresh</a> --}}
                 {{-- <a class="btn btn-primary btn-sm my-1 mr-sm-1" href="create" role="button"><i class="fas fa-plus"></i> Tambah Data</a> --}}
                 <br>
             </div>
 
-        <div class="row">
-            <div class="col-12 table-responsive">
-                <table class="table table-hover table-head-fixed" id="tabelAgendaMasuk">
-                    <thead>
-                        <tr class="bg-light">
-                            <th>NIS</th>
-                            <th><div style="width:110px;">Nama</div></th>
-                            <th><div style="width:110px;">Tahun Angkatan</div></th>
-                            <th><div style="width:110px;">Nilai Preferensi</div></th>
-                           
-                        </tr>
-                    </thead>
-                    <tbody>
-                       @foreach($datas as $siswa)
-                        <tr>
-                            <td>{{ $siswa->siswa->nis }}</td>
-                            <td>{{ $siswa->siswa->nama }}</td>
-                            <td>{{ $siswa->siswa->tahun }}</td>
-
-                            <td>
-                                @php
-                                    $bobot_kepala = $siswa->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');
-                                @endphp
-                                {{ $bobot_kepala }}
-                            </td>
-                            {{-- <td>
-                                @php
-                                    $bobot_yayasan = $siswa->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');
-                                @endphp
-                                {{ $bobot_yayasan }}
-                            </td>
-                            <td>
-                                @php
-                                    $bobot_orang_tua_asuh = $siswa->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');
-                                @endphp
-                                {{ $bobot_orang_tua_asuh }}
-                            </td> --}}
-                        </tr>
-                    @endforeach
-
-                    </tbody>
-                </table>
+            <div class="row">
+                <div class="col-12 table-responsive">
+                    <table class="table table-hover table-head-fixed" id="tabelAgendaMasuk">
+                        <thead>
+                            <tr class="bg-light">
+                                <th>NIS</th>
+                                <th><div style="width:110px;">Nama</div></th>
+                                <th><div style="width:110px;">Tahun</div></th>
+                                <th>Nilai Preferensi</th>
+                                {{-- <th>Total Perhitungan Bobot Beasiswa Yayasan</th>
+                                <th>Total Perhitungan Bobot Beasiswa Orang Tua Asuh</th> --}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                           @foreach($siswa as $siswas)
+                            <tr>
+                                {{-- @php
+                                    var_dump($siswas);
+                                @endphp --}}
+                                <td>{{ $siswas->siswa->nis }}</td>
+                                <td>{{ $siswas->siswa->nama }}</td>
+                                <td>{{ $siswas->siswa->tahun }}</td>
+    
+                                <td>
+                                    @php
+                                        $bobot_kepala = $siswas->nilai_preferensi;
+                                    @endphp
+                                    {{ $bobot_kepala }}
+                                </td>
+                                {{-- <td>
+                                    @php
+                                        $bobot_yayasan = $siswas->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');
+                                    @endphp
+                                    {{ $bobot_yayasan }}
+                                </td>
+                                <td>
+                                    @php
+                                        $bobot_orang_tua_asuh = $siswas->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');
+                                    @endphp
+                                    {{ $bobot_orang_tua_asuh }}
+                                </td> --}}
+                            </tr>
+                        @endforeach
+    
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
     </div>
 </section>
 @endsection

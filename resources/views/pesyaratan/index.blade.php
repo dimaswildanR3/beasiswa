@@ -70,10 +70,10 @@
                         @forelse($datas as $index => $Penilaian)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $Penilaian->siswa?->nis ?? '-' }}</td>
-                            <td>{{ $Penilaian->siswa?->nama ?? '-' }}</td>
-                            <td>{{ $Penilaian->beasiswa?->nama_beasiswa ?? '-' }}</td>
-                            <td>{{ $Penilaian->kriteria?->nama ?? '-' }}</td>
+                            <td>{{ $Penilaian->siswa->nis ?? '-' }}</td>
+                            <td>{{ $Penilaian->siswa->nama ?? '-' }}</td>
+                            <td>{{ $Penilaian->beasiswa->nama_beasiswa ?? '-' }}</td>
+                            <td>{{ $Penilaian->kriteria->nama ?? '-' }}</td>
                             <td>{{ $Penilaian->nilai }}</td>
                             <td class="text-center">
                                 <div style="width: 220px;">

@@ -1,22 +1,48 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
-<div class="container mt-4">
-    <h2 class="mb-4">Laporan Beasiswa - Metode SAW</h2>
-    
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-    
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+<section class="content card" style="padding: 10px 10px 20px 20px">
+    <div class="box">
+        @if(session('sukses'))
+            <div class="callout callout-success alert alert-success alert-dismissible fade show" role="alert">
+                <h5><i class="fas fa-check"></i> Sukses :</h5>
+                {{ session('sukses') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        @if(session('warning'))
+            <div class="callout callout-warning alert alert-warning alert-dismissible fade show" role="alert">
+                <h5><i class="fas fa-info"></i> Informasi :</h5>
+                {{ session('warning') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="callout callout-danger alert alert-danger alert-dismissible fade show">
+                <h5><i class="fas fa-exclamation-triangle"></i> Peringatan :</h5>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        <div class="row">
+            <div class="col">
+                <h4><i class="nav-icon fas fa-child my-0 btn-sm-1"></i> Laporan Beasiswa</h4>
+                <hr>
+            </div>
         </div>
-<<<<<<< HEAD
 
         <!-- Filter Tahun Masuk, Tahun Pelajaran, and Jenis Beasiswa -->
         <form method="GET" action="{{ route('perhitunganbeasiswa') }}">
@@ -80,55 +106,54 @@
             <br>
         </div>
 
-=======
-    @endif
-    
-    <form method="GET" action="{{ route('laporan.index') }}" class="mb-4">
->>>>>>> f83154f430c9230c7c57c8160760f58524c805c7
         <div class="row">
-            <div class="col-md-4">
-                <label for="tahun" class="form-label">Tahun</label>
-                <select name="tahun" id="tahun" class="form-control">
-    <option value="">Semua</option>
-    @foreach ($tahunOptions as $tahunOption)
-        <option value="{{ $tahunOption->tahun }}" {{ request('tahun') == $tahunOption->tahun ? 'selected' : '' }}>
-            {{ $tahunOption->tahun }}
-        </option>
-    @endforeach
-</select>
+            <div class="col-12 table-responsive">
+                <table class="table table-hover table-head-fixed" id="tabelAgendaMasuk">
+                    <thead>
+                        <tr class="bg-light">
+                            <th>NIS</th>
+                            <th><div style="width:110px;">Nama</div></th>
+                            <th><div style="width:110px;">Tahun</div></th>
+                            <th>Nilai Preferensi</th>
+                            {{-- <th>Total Perhitungan Bobot Beasiswa Yayasan</th>
+                            <th>Total Perhitungan Bobot Beasiswa Orang Tua Asuh</th> --}}
+                        </tr>
+                    </thead>
+                    <tbody>
+                       @foreach($siswa as $siswas)
+                        <tr>
+                            {{-- @php
+                                var_dump($siswas);
+                            @endphp --}}
+                            <td>{{ $siswas->siswa->nis }}</td>
+                            <td>{{ $siswas->siswa->nama }}</td>
+                            <td>{{ $siswas->siswa->tahun }}</td>
 
-            </div>
-            <div class="col-md-4 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary">Filter</button>
+                            <td>
+                                @php
+                                    $bobot_kepala = $siswas->nilai_preferensi;
+                                @endphp
+                                {{ $bobot_kepala }}
+                            </td>
+                            {{-- <td>
+                                @php
+                                    $bobot_yayasan = $siswas->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');
+                                @endphp
+                                {{ $bobot_yayasan }}
+                            </td>
+                            <td>
+                                @php
+                                    $bobot_orang_tua_asuh = $siswas->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');
+                                @endphp
+                                {{ $bobot_orang_tua_asuh }}
+                            </td> --}}
+                        </tr>
+                    @endforeach
+
+                    </tbody>
+                </table>
             </div>
         </div>
-    </form>
-    
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Nilai SAW</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($laporan as $index => $item)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $item->nama }}</td>
-                        <td>{{ number_format($item->nilai_saw, 2) }}</td>
-                        <td>{{ $item->status }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="text-center">Data tidak ditemukan</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
     </div>
-</div>
+</section>
 @endsection
