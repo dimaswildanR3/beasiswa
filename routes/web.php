@@ -19,6 +19,8 @@ Route::get('/logout', 'AuthController@logout');
 //Route untuk user Admin
 Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/siswa/index', 'SiswaController@index')->name('siswa');
+    Route::get('/siswa/copy', 'SiswaController@copyData')->name('siswa.copy');
+    Route::post('/siswa/copy', 'SiswaController@storeCopiedData')->name('siswa.storeCopy');
   
   
     Route::get('/laporanpendaftaran/index', 'SiswaController@indexxxx')->name('laporanpendaftaran');
@@ -29,6 +31,14 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/siswa/{id}/edit', 'SiswaController@edit');
     Route::post('/siswa/{id}/update', 'SiswaController@update');
     Route::get('/siswa/{id}/delete', 'SiswaController@delete');
+
+    Route::get('/kelas/index', 'kelasController@index')->name('kelas.index');
+    Route::get('/kelas/create', 'KelasController@create');
+    Route::get('/kelas/{id}/edit', 'KelasController@edit');
+    Route::post('/kelas/store', 'KelasController@store');
+    Route::post('/kelas/{id}/update', 'KelasController@update');
+    Route::get('/kelas/{id}/show', 'KelasController@show');
+    Route::get('/kelas/{id}/delete', 'KelasController@destroy');
 
    
     Route::get('/penilaian/index', 'PenilaianController@index')->name('penilaian');

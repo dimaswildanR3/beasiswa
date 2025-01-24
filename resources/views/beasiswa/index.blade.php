@@ -58,7 +58,7 @@
                                 <th><div style="width:110px;">Beasiswa</div></th>
                                 {{-- <th><div style="width:110px;">alamat</div></th>
                                 <th><div style="width:110px;">Jenis Kelamin</div></th> --}}
-                                <th><center> Aksi</center></th>
+                                {{-- <th><center> Aksi</center></th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -71,19 +71,19 @@
                                 <td>{{$beasiswa->nama_beasiswa}}</td>
                                 {{-- <td>{{$beasiswa->alamat}}</td>
                                 <td>{{$beasiswa->jenis_kelamin}}</td> --}}
-                                <td>
-                                    <center>
-                                    <div class="ok"style="width:220px;">
-                                    <a href="/beasiswa/{{$beasiswa->id}}/edit" class="btn btn-primary btn-sm my-1 mr-sm-1"><i class="nav-icon fas fa-pencil-alt"></i> Edit</a>
-                                    @if (auth()->user()->role == 'admin')
+                                {{-- <td> --}}
+                                    {{-- <center> --}}
+                                    {{-- <div class="ok"style="width:220px;"> --}}
+                                    {{-- <a href="/beasiswa/{{$beasiswa->id}}/edit" class="btn btn-primary btn-sm my-1 mr-sm-1"><i class="nav-icon fas fa-pencil-alt"></i> Edit</a> --}}
+                                    {{-- @if (auth()->user()->role == 'admin') --}}
                                     <!--<a href="/beasiswa/{{$beasiswa->id}}/delete" class="btn btn-danger btn-sm my-1 mr-sm-1" onclick="return confirm('Hapus Data ?')"><i class="nav-icon fas fa-trash"></i>-->
                                     <!--    Hapus</a>-->
                                     {{-- <a href="/beasiswa/{{$beasiswa->id}}/show" class="btn btn-success btn-sm my-1 mr-sm-1"><i class="nav-icon fas fa-child"></i> Detail</a> --}}
-                                    @endif
+                                    {{-- @endif --}}
                             
-                                </div>
-                            </center>
-                                </td>
+                                {{-- </div> --}}
+                            {{-- </center> --}}
+                                {{-- </td> --}}
                             </tr>
                             @endforeach
                         </tbody>

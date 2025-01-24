@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Kelas;
 use App\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,17 +27,30 @@ class SiswaController extends Controller
             $this->middleware('auth');
         }
     
-        public function index()
+        public function index(Request $request)
         {
-            
-            if(Auth::user()->level == 'admin') {
-                Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
-                return redirect()->to('/');
-            }
-    
-            $datas = Siswa::orderBy('tahun', 'desc')->get();
-            return view('siswa.index', compact('datas'));
+            // Ambil data filter dari request
+            $tahun = $request->input('tahun');
+            $kelasId = $request->input('kelas');
+        
+            // Ambil data tahun ajaran yang unik dari tabel siswa
+            $tahunAjaran = Siswa::distinct()->pluck('tahun'); // Mengambil tahun ajaran yang unik
+        
+            // Ambil data kelas yang tersedia untuk dropdown
+            $kelas = Kelas::all();
+        
+            // Query untuk mengambil data siswa dengan filter
+            $datas = Siswa::when($tahun, function ($query) use ($tahun) {
+                return $query->where('tahun', $tahun);
+            })
+            ->when($kelasId, function ($query) use ($kelasId) {
+                return $query->where('kelas', $kelasId);
+            })
+            ->get();
+        
+            return view('siswa.index', compact('datas', 'tahunAjaran', 'kelas'));
         }
+        
         
         public function indexxxx()
         {
@@ -57,13 +71,19 @@ class SiswaController extends Controller
          */
         public function create()
         {
-            if(Auth::user()->level == 'admin') {
+            // Cek jika user memiliki level admin
+            if (Auth::user()->level == 'admin') {
                 Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
                 return redirect()->to('/');
             }
-    
-            return view('siswa.create');
+        
+            // Ambil data kelas dari database
+            $kelas = Kelas::all();  // Mengambil semua data kelas
+        
+            // Pass data kelas ke view siswa.create
+            return view('siswa.create', compact('kelas'));
         }
+        
     
         /**
          * Store a newly created resource in storage.
@@ -72,22 +92,24 @@ class SiswaController extends Controller
          * @return \Illuminate\Http\Response
          */
         public function store(Request $request)
-        {
+        { $request->validate([
+            'nis'  => 'required|unique:siswa,nis',
+            'nama' => 'required|unique:siswa,nama',
+        ]);
                 $siswa = new Siswa;
                 $siswa->nis             = $request->input('nis');
                 $siswa->nama            = $request->input('nama');
                 $siswa->alamat          = $request->input('alamat');
                 // $siswa->penerbit        = $request->input('penerbit');
                 $siswa->Jenis_kelamin   = $request->input('Jenis_kelamin');
-                $siswa->tanggungan   = $request->input('tanggungan');
-                $siswa->penghasilan   = $request->input('penghasilan');      
-                $siswa->nilai   = $request->input('nilai');      
-                $siswa->jarak   = $request->input('jarak');      
+             
                 $siswa->tahun   = $request->input('tahun');      
+                $siswa->kelas   = $request->input('kelas');      
                 $siswa->save();
             return redirect()->route('siswa')->with('sukses', 'Data Siswa Berhasil Ditambah');
     
         }
+        
         /**
          * Display the specified resource.
          *
@@ -119,9 +141,9 @@ class SiswaController extends Controller
                     return redirect()->to('/');
             }
             $siswa = Siswa::findOrFail($id);
-        
-            return view('siswa/edit', compact('siswa'));
-    
+            $kelas = Kelas::all();
+            return view('siswa/edit', compact('siswa', 'kelas'));
+
         
         }
     
@@ -140,11 +162,12 @@ class SiswaController extends Controller
             $siswa->alamat          = $request->input('alamat');
             // $siswa->penerbit        = $request->input('penerbit');
             $siswa->Jenis_kelamin   = $request->input('Jenis_kelamin');      
-            $siswa->tanggungan   = $request->input('tanggungan');      
-            $siswa->penghasilan   = $request->input('penghasilan');      
-            $siswa->nilai   = $request->input('nilai');      
-            $siswa->jarak   = $request->input('jarak');      
+            // $siswa->tanggungan   = $request->input('tanggungan');      
+            // $siswa->penghasilan   = $request->input('penghasilan');      
+            // $siswa->nilai   = $request->input('nilai');      
+            // $siswa->jarak   = $request->input('jarak');      
             $siswa->tahun   = $request->input('tahun');      
+            $siswa->kelas   = $request->input('kelas');      
             $siswa->update();
     
             // $data->cover = $cover;
@@ -185,5 +208,55 @@ class SiswaController extends Controller
         public function export_excell()
         {
             return Excel::download(new LaporanbeasiswaExport, 'laporanbeasiswa.xlsx');
+        }
+
+        public function copyData()
+        {
+            // Ambil data tahun ajaran dan kelas yang tersedia
+            $tahunAjaran = Siswa::distinct()->pluck('tahun'); // Ambil data tahun ajaran unik
+            $kelas = Kelas::all(); // Ambil data kelas
+    
+            return view('siswa.copy', compact('tahunAjaran', 'kelas'));
+        }
+    
+        // Menangani proses copy data berdasarkan tahun ajaran dan kelas
+        public function storeCopiedData(Request $request)
+        {
+            // Validasi input
+            $request->validate([
+                'tahun' => 'required',
+                'kelas' => 'required',
+                'tahun_baru' => 'required|different:tahun',  // Pastikan tahun_baru tidak sama dengan tahun
+                'kelas_baru' => 'required',
+            ], [
+                'tahun_baru.different' => 'Tahun baru tidak boleh sama dengan tahun yang lama.',  // Pesan error custom
+            ]);
+            
+            
+    
+            // Ambil data siswa berdasarkan tahun ajaran dan kelas yang dipilih
+            $siswa = Siswa::where('tahun', $request->tahun)
+                          ->where('kelas', $request->kelas)
+                          ->get();
+                          if ($siswa->isEmpty()) {
+                            return back()->withErrors(['not_found' => 'Tidak ada data siswa untuk tahun dan kelas yang dipilih.']);
+                        }
+                    
+    
+            // Loop untuk menyalin data dan mengubah tahun dan kelas
+            foreach ($siswa as $siswaItem) {
+                // Buat salinan data siswa dengan tahun dan kelas baru
+                Siswa::create([
+                    'nis' => $siswaItem->nis,
+                    'nama' => $siswaItem->nama,
+                    'alamat' => $siswaItem->alamat,
+                    'jenis_kelamin' => $siswaItem->jenis_kelamin,
+                    'tahun' => $request->tahun_baru, // Ganti dengan tahun baru
+                    'kelas' => $request->kelas_baru, // Ganti dengan kelas baru
+                    // Tambahkan field lain jika diperlukan
+                ]);
+            }
+    
+            return redirect()->route('siswa')->with('sukses', 'Data berhasil disalin dengan tahun dan kelas baru!');
         }
     }

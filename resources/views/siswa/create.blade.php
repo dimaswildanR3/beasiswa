@@ -44,8 +44,8 @@
                 <div class="col-md-6">
                     <label for="nama">Nama Siswa</label>
                     <input value="{{old('nama')}}" name="nama" type="text" class="form-control" id="nama" placeholder="Nama Siswa" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
-                    <label for="nis">Nisn</label>
-                    <input value="{{old('nis')}}" name="nis" type="number" class="form-control" id="nis" placeholder="Nisn" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                    <label for="nis">Nis</label>
+                    <input value="{{old('nis')}}" name="nis" type="number" class="form-control" id="nis" placeholder="Nis" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
                     
                     <label for="alamat">Alamat</label>
                     <input value="{{old('alamat')}}" name="alamat" type="text" class="form-control" id="alamat" placeholder="Alamat" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
@@ -55,6 +55,18 @@
                         <option value="Laki-Laki">Laki-laki</option>
                         <option value="Perempuan">Perempuan</option>
                     </select>
+                    <label for="tahun">Tahun Angkatan</label>
+                    <input value="{{old('tahun')}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="Tahun Angkatan" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                    <label for="kelas">Kelas</label>
+                    <select name="kelas" class="form-control" id="kelas" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                        <option value="">Pilih Kelas</option>
+                        @foreach($kelas as $k)
+                            <option value="{{ $k->id }}" {{ old('kelas') == $k->id ? 'selected' : '' }}>
+                                {{ $k->nama_kelas }}
+                            </option>
+                        @endforeach
+                    </select>
+                    
                 </div>
                 <!--<div class="col-md-6">-->
                 <!--    {{-- <div class="col-md-6"> --}}-->
@@ -62,8 +74,7 @@
                 <!--        <input value="{{old('penghasilan')}}" name="penghasilan" type="number" class="form-control" id="penghasilan" placeholder="Penghasilan Orang Tua" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">-->
                 <!--        <label for="tanggungan">Tanggungan Orang Tua</label>-->
                 <!--        <input value="{{old('tanggungan')}}" name="tanggungan" type="number" class="form-control" id="tanggungan" placeholder="Tanggungan Orang Tua" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">-->
-                <!--        <label for="tahun">Tahun Angkatan</label>-->
-                <!--        <input value="{{old('tahun')}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="Tahun Angkatan" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">-->
+         
                 <!--        {{-- <label for="nilai">Nilai</label>-->
                 <!--        <input value="{{old('nilai')}}" name="nilai" type="number" class="form-control" id="nilai" placeholder="Nilai" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')"> --}}-->
                 <!--        {{-- <div class="col-sm-6">-->

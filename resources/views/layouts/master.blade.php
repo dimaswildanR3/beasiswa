@@ -184,12 +184,19 @@
                                     <p>Siswa</p>
                                 </a>
                             </li>
-                            <!--<li class="nav-item">-->
-                            <!--    <a href="/nilaipelajaran/index" class="nav-link text-black">-->
-                            <!--        <i class="far fas fa-user nav-icon"></i>-->
-                            <!--        <p>Nilai Ajaran</p>-->
-                            <!--    </a>-->
-                            <!--</li>-->
+                            <li class="nav-item">
+                                <a href="/kelas/index" class="nav-link text-black">
+                                    <i class="fas fa-book nav-icon"></i>
+                                    <p>Kelas</p>
+                                </a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a href="/nilaipelajaran/index" class="nav-link text-black">
+                                    <i class="far fas fa-user nav-icon"></i>
+                                    <p>Nilai Ajaran</p>
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a href="/beasiswa/index" class="nav-link text-black">
                                     <i class="fas fa-solid fa-wallet nav-icon"></i>

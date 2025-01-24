@@ -1,0 +1,73 @@
+@extends('layouts.master')
+
+@section('content')
+<section class="content card" style="padding: 10px 10px 10px 10px ">
+    <div class="box">
+        @if(session('sukses'))
+        <div class="callout callout-success alert alert-success alert-dismissible fade show" role="alert">
+            <h5><i class="fas fa-check"></i> Sukses :</h5>
+            {{session('sukses')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
+
+        @if(session('warning'))
+        <div class="callout callout-warning alert alert-warning alert-dismissible fade show" role="alert">
+            <h5><i class="fas fa-info"></i> Informasi :</h5>
+            {{session('warning')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
+
+        @if ($errors->any())
+        <div class="callout callout-danger alert alert-danger alert-dismissible fade show">
+            <h5><i class="fas fa-exclamation-triangle"></i> Peringatan :</h5>
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
+        <form action="{{ route('instansi.update', $instansi->id) }}" method="POST" enctype="multipart/form-data">
+            <h4><i class="nav-icon fas fa-warehouse my-1 btn-sm-1"></i> Edit Profil Sekolah</h4>
+            <hr>
+            {{ csrf_field() }}
+            @method('put')
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="nama">Nama Sekolah</label>
+                    <input name="nama" type="text" class="form-control bg-light" id="nama" placeholder="Nama Instansi" value="{{$instansi->nama}}" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                    <label for="alamat">Alamat</label>
+                    <textarea name="alamat" class="form-control bg-light" id="alamat" rows="3" placeholder="Alamat" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">{{$instansi->alamat}}</textarea>
+                </div>
+                <div class="col-md-6">
+                    <label for="pimpinan">Nama Pimpinan</label>
+                    <input name="pimpinan" type="text" class="form-control bg-light" id="pimpinan" placeholder="Nama Pimpinan" value="{{$instansi->pimpinan}}" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                    <label for="email">Email Instansi</label>
+                    <input name="email" type="email" class="form-control bg-light" id="email" placeholder="Email Instansi" value="{{$instansi->email}}" required email oninvalid="this.setCustomValidity('Pastikan anda sudah mengisikan email dengan benar !')" oninput="setCustomValidity('')">
+                    <div class="form-group">
+                        <label for="exampleFormControlFile1">File</label>
+                        <input name="file" type="file" class="form-control-file" id="exampleFormControlFile1" value="{{$instansi->file}}">
+                        <small id="exampleFormControlFile1" class="text-warning">
+                            Format file yang diperbolehkan hanya *.JPG, *.PNG dan ukuran maksimal file 2 MB. Disarankan
+                            gambar berbentuk kotak atau lingkaran!
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <button type="submit" class="btn btn-success btn-sm "><i class="fas fa-save"></i> SIMPAN</button>
+            <a class="btn btn-danger btn-sm" href="/instansi" role="button"><i class="fas fa-undo"></i> BATAL</a>
+        </form>
+    </div>
+    </div>
+</section>
+@endsection

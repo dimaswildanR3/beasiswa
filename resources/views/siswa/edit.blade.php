@@ -53,7 +53,20 @@
                         <option value="Laki-Laki" @if ($siswa->Jenis_kelamin == 'Laki-Laki') selected @endif>Laki-Laki</option>
                         <option value="Perempuan" @if ($siswa->Jenis_kelamin == 'Perempuan') selected @endif>Perempuan</option>
                     </select>
+                    <label for="tahun">Tahun Angkatan</label>
+                    <input value="{{$siswa->tahun}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="Tahun Angkatan" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                    <label for="kelas">Kelas</label>
+                    <select name="kelas" class="form-control" id="kelas" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                        <option value="">Pilih Kelas</option>
+                        @foreach($kelas as $k)
+                            <option value="{{ $k->id }}" {{ old('kelas', $siswa->kelas) == $k->id ? 'selected' : '' }}>
+                                {{ $k->nama_kelas }}
+                            </option>
+                        @endforeach
+                    </select>
+                    
                 </div>
+
             <!--    <div class="col-md-6">-->
             <!--        <label for="tanggungan">Tanggungan Orang Tua</label>-->
             <!--        <input value="{{$siswa->tanggungan}}" name="tanggungan" type="number" class="form-control" id="tanggungan" placeholder="tanggungan" >-->
