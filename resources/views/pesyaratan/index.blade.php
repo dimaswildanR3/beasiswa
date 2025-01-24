@@ -39,7 +39,7 @@
 
         <div class="row">
             <div class="col">
-                <h4><i class="nav-icon fas fa-child my-0 btn-sm-1"></i> Pesyaratan</h4>
+                <h4><i class="nav-icon fas fa-child my-0 btn-sm-1"></i> Penilaian</h4>
                 <hr>
             </div>
         </div>
@@ -62,7 +62,7 @@
                             <th style="width:110px;">Nama</th>
                             <th style="width:110px;">Beasiswa</th>
                             <th style="width:110px;">Kriteria</th>
-                            <th style="width:110px;">Nilai</th>
+                            <th style="width:110px;">Value</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -77,9 +77,9 @@
                             <td>{{ $Penilaian->nilai }}</td>
                             <td class="text-center">
                                 <div style="width: 220px;">
-                                    <a href="{{ route('pesyaratan.edit', $Penilaian->id) }}" class="btn btn-primary btn-sm">
-                                        <i class="nav-icon fas fa-pencil-alt"></i> Edit
-                                    </a>
+                                    <!--<a href="{{ route('pesyaratan.edit', $Penilaian->id) }}" class="btn btn-primary btn-sm">-->
+                                    <!--    <i class="nav-icon fas fa-pencil-alt"></i> Edit-->
+                                    <!--</a>-->
 
                                     @if (auth()->user()->role == 'admin')
                                     <form action="{{ route('pesyaratan.destroy', $Penilaian->id) }}" method="POST" class="d-inline"

@@ -149,7 +149,7 @@ class KriteriaController extends Controller
     
     {
         try {
-            $rombel = \App\kriteria::find($id);
+            $rombel = kriteria::find($id);
             $rombel->delete();
             return redirect('kriteria/index')->with('sukses', 'Data Rombongan Belajar Berhasil Dihapus');
         } catch (\Illuminate\Database\QueryException $ex) {

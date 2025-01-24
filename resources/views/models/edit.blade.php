@@ -65,7 +65,7 @@
                     <label for="bobot">Bobot</label>
                     <input value="{{ old('bobot', $Models->bobot) }}" 
                            name="bobot" type="number" class="form-control" id="bobot" 
-                           placeholder="0.00" step="0.01" required 
+                           placeholder="0" step="0.01" required 
                            oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" 
                            oninput="setCustomValidity('')">
                     

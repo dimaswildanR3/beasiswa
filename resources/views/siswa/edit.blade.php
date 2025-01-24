@@ -54,19 +54,19 @@
                         <option value="Perempuan" @if ($siswa->Jenis_kelamin == 'Perempuan') selected @endif>Perempuan</option>
                     </select>
                 </div>
-                <div class="col-md-6">
-                    <label for="tanggungan">Tanggungan Orang Tua</label>
-                    <input value="{{$siswa->tanggungan}}" name="tanggungan" type="number" class="form-control" id="tanggungan" placeholder="tanggungan" >
-                    <label for="penghasilan">Penghasilan Orang Tua</label>
-                    <input value="{{$siswa->penghasilan}}" name="penghasilan" type="number" class="form-control" id="penghasilan" placeholder="penghasilan" >
-                    <label for="tahun">Tahun Angkatan</label>
-                    <input value="{{$siswa->tahun}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="Tahun Angkatan" >
-                    {{-- <label for="nilai">Nilai</label>
-                    <input value="{{$siswa->nilai}}" name="nilai" type="number" class="form-control" id="nilai" placeholder="nilai" > --}}
-                    {{-- <label for="jarak">Jarak</label>
-                    <input value="{{$siswa->jarak}}" name="jarak" type="number" class="form-control" id="jarak" placeholder="jarak" > --}}
+            <!--    <div class="col-md-6">-->
+            <!--        <label for="tanggungan">Tanggungan Orang Tua</label>-->
+            <!--        <input value="{{$siswa->tanggungan}}" name="tanggungan" type="number" class="form-control" id="tanggungan" placeholder="tanggungan" >-->
+            <!--        <label for="penghasilan">Penghasilan Orang Tua</label>-->
+            <!--        <input value="{{$siswa->penghasilan}}" name="penghasilan" type="number" class="form-control" id="penghasilan" placeholder="penghasilan" >-->
+            <!--        <label for="tahun">Tahun Angkatan</label>-->
+            <!--        <input value="{{$siswa->tahun}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="Tahun Angkatan" >-->
+            <!--        {{-- <label for="nilai">Nilai</label>-->
+            <!--        <input value="{{$siswa->nilai}}" name="nilai" type="number" class="form-control" id="nilai" placeholder="nilai" > --}}-->
+            <!--        {{-- <label for="jarak">Jarak</label>-->
+            <!--        <input value="{{$siswa->jarak}}" name="jarak" type="number" class="form-control" id="jarak" placeholder="jarak" > --}}-->
 
-            </div>
+            <!--</div>-->
             </div>
             <hr>
             <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-save"></i> SIMPAN</button>

@@ -26,35 +26,35 @@
         }
     </style>
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="/adminLTE/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/fontawesome-free/css/all.min.css')}}">
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="/adminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="/adminLTE/css/adminlte.min.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/css/adminlte.min.css')}}">
     <!-- DataTables -->
-    <link rel="stylesheet" href="/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.css')}}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="/adminLTE/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/dist/css/adminlte.min.css')}}">
     <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link href="{{ asset('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700')}}" rel="stylesheet">
 
     <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="{{ asset('https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css')}}">
     <!-- Tempusdominus Bbootstrap 4 -->
-    <link rel="stylesheet" href="/adminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
     <!-- iCheck -->
-    <link rel="stylesheet" href="/adminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
     <!-- JQVMap -->
-    <link rel="stylesheet" href="/adminLTE/plugins/jqvmap/jqvmap.min.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/jqvmap/jqvmap.min.css')}}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="/adminLTE/css/adminlte.min.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/css/adminlte.min.css')}}">
     <!-- Daterange picker -->
-    <link rel="stylesheet" href="/adminLTE/plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/daterangepicker/daterangepicker.css')}}">
     <!-- summernote -->
-    <link rel="stylesheet" href="/adminLTE/plugins/summernote/summernote-bs4.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/summernote/summernote-bs4.css')}}">
     <!-- Select2 -->
-    <link rel="stylesheet" href="/adminLTE/plugins/select2/css/select2.min.css">
-    <link rel="stylesheet" href="/adminLTE/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/select2/css/select2.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
 
     <!-- responsive image  -->
     <style>
@@ -157,7 +157,7 @@
                             <i class="nav-icon fas fa-bars"></i>
                             
                             <p>
-                                Dashborad
+                                Dashboard
                             </p>
                         </a>
                     </li>
@@ -173,7 +173,7 @@
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-sharp fa-light fa-pen"></i>
                             <p>
-                                Input
+                                Data
                                 <i class="fas fa-angle-left right"></i>
                             </p>
                         </a>
@@ -184,12 +184,12 @@
                                     <p>Siswa</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="/nilaipelajaran/index" class="nav-link text-black">
-                                    <i class="far fas fa-user nav-icon"></i>
-                                    <p>Nilai Ajaran</p>
-                                </a>
-                            </li>
+                            <!--<li class="nav-item">-->
+                            <!--    <a href="/nilaipelajaran/index" class="nav-link text-black">-->
+                            <!--        <i class="far fas fa-user nav-icon"></i>-->
+                            <!--        <p>Nilai Ajaran</p>-->
+                            <!--    </a>-->
+                            <!--</li>-->
                             <li class="nav-item">
                                 <a href="/beasiswa/index" class="nav-link text-black">
                                     <i class="fas fa-solid fa-wallet nav-icon"></i>
@@ -211,13 +211,13 @@
                             <li class="nav-item">
                                 <a href="/penilaian/index" class="nav-link text-black">
                                     <i class="fas fa-solid fa-marker nav-icon"></i>
-                                    <p>Penilaian</p>
+                                    <p>Bobot</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="/pesyaratan/index" class="nav-link text-black">
                                     <i class="fas fa-check nav-icon"></i>
-                                    <p>Pesyaratan</p>
+                                    <p>Penilaian</p>
                                 </a>
                             </li>
                         </ul>
@@ -234,13 +234,13 @@
                             <li class="nav-item">
                                 <a href="/laporansiswa/index" class="nav-link text-black">
                                     <i class="far fas fa-user nav-icon"></i>
-                                    <p>Laporam BP</p>
+                                    <p>Laporan BP</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="/laporasseluruh/index" class="nav-link text-black">
                                     <i class="far fas fa fa-file nav-icon"></i>
-                                    <p>Laporam BKM</p>
+                                    <p>Laporan BKM</p>
                                 </a>
                             </li>
                             
@@ -354,24 +354,24 @@
     <!-- Ck editor -->
     <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
     <!-- jQuery -->
-    <script src="/adminLTE/jquery/jquery.min.js"></script>
+    <script src="/adminlte/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
-    <script src="/adminLTE/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/adminlte/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Select2 -->
-    <script src="/adminLTE/plugins/select2/js/select2.full.min.js"></script>
+    <script src="/adminlte/plugins/select2/js/select2.full.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="/adminLTE/js/adminlte.min.js"></script>
+    <script src="/adminlte/js/adminlte.min.js"></script>
     <!-- Ekko Lightbox -->
-    <script src="/adminLTE/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
+    <script src="/adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
     <!-- Filterizr-->
-    <script src="/adminLTE/plugins/filterizr/jquery.filterizr.min.js"></script>
+    <script src="/adminlte/plugins/filterizr/jquery.filterizr.min.js"></script>
     <!-- Data Table -->
-    <script src="/adminLTE/plugins/datatables/jquery.dataTables.js"></script>
-    <script src="/adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+    <script src="/adminlte/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
     <!-- overlayScrollbars -->
-    <script src="/adminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="/adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="/adminLTE/js/demo.js"></script>
+    <script src="/adminlte/js/demo.js"></script>
 
 
     <script>

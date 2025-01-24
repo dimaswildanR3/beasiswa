@@ -45,7 +45,7 @@ class ModelsController extends Controller
         
         $Beasiswa = \App\Beasiswa::get();
         $Kriteria = \App\Kriteria::get();
-        return view('Models.create', compact(['Kriteria','Beasiswa','Beasiswa' => $Beasiswa,'kriteria' => $Kriteria]));
+        return view('models.create', compact(['Kriteria','Beasiswa','Beasiswa' => $Beasiswa,'kriteria' => $Kriteria]));
     }
 
     /**
@@ -116,7 +116,7 @@ class ModelsController extends Controller
         $Models = Models::where('id', $id)->first();
         $Models->id_beasiswa             = $request->input('id_beasiswa');
         $Models->id_kriteria            = $request->input('id_kriteria');
-        $Models->bobot          = $request->input('bobot');
+        $Models->bobot          = $request->input('bobot')/100;
         // $Models->penerbit        = $request->input('penerbit');
         // $Models->Jenis_kelamin   = $request->input('Jenis_kelamin');      
         $Models->update();

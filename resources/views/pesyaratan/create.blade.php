@@ -47,7 +47,7 @@
         </div>
         @endif
         <form action="/pesyaratan/store" method="POST" enctype="multipart/form-data">
-            <h4><i class="nav-icon fas fa-child my-1 btn-sm-1"></i> Tambah Pesyaratan</h4>
+            <h4><i class="nav-icon fas fa-child my-1 btn-sm-1"></i> Tambah Penilain</h4>
             <hr>
             {{csrf_field()}}
             <div class="row">
@@ -70,14 +70,11 @@
                     </select>
                     
                        
-                <label for="nilaip">Tahun Ajaran</label>
-                <select name="nilaip" class="form-control my-1 mr-sm-2 bg-light" id="nilaip"  oninput="setCustomValidity('')">
-                        <option value="">-- Pilih Tahun Ajaran  --</option>
-                        @foreach($nilaiajaran as $test)
-                        <option value="{{$test->tahun_pelajaran}}"> {{$test->tahun_pelajaran}}
-                        </option>
-                        @endforeach
-                    </select>
+               <label for="nilaip">Tahun Ajaran</label>
+<input type="number" name="nilaip" class="form-control my-1 mr-sm-2 bg-light" id="nilaip">
+               <label for="value">value</label>
+<input type="number" name="value" class="form-control my-1 mr-sm-2 bg-light" id="value">
+
                     {{-- <label for="nilai">Nilai</label>
                     <input value="{{old('nilai')}}" name="nilai" type="text" class="form-control" id="nilai" placeholder="nilai" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">                    --}}
                     {{-- <label for="nama">Beasiswa</label>

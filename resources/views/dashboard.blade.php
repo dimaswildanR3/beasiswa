@@ -34,8 +34,8 @@
           <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-envelope-open"></i></span>
 
           <div class="info-box-content">
-            <span class="info-box-text">Hasil</span>
-            {{-- <span class="info-box-number">{{DB::table('hasil')->count()?:0}}</span> --}}
+            <span class="info-box-text">Kriteria</span>
+             <span class="info-box-number">{{DB::table('kriteria')->count()?:0}}</span> 
           </div>
           <!-- /.info-box-content -->
         </div>
@@ -74,67 +74,67 @@
     <!-- /.row -->
   </div>
   @if (auth()->user()->role == 'admin' || auth()->user()->role == 'PetugasAdministrasiKeuangan')
-  <div class="col-md-9">
-    <section class="content card" style="padding: 15px 15px 40px 15px ">
-      <div class="box">
-        <div class="row">
-          <div class="col">
-            <h4><i class="nav-icon fas fa-warehouse my-0 btn-sm-1"></i> Rekap Data Sekolah</h4>
-            <hr>
-          </div>
-        </div>
-        <div class="card-body">
+  <!--<div class="col-md-9">-->
+  <!--  <section class="content card" style="padding: 15px 15px 40px 15px ">-->
+  <!--    <div class="box">-->
+  <!--      <div class="row">-->
+  <!--        <div class="col">-->
+  <!--          <h4><i class="nav-icon fas fa-warehouse my-0 btn-sm-1"></i> Rekap Data Sekolah</h4>-->
+  <!--          <hr>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <div class="card-body">-->
           <!-- Small boxes (Stat box) -->
-          <div class="filter-container p-0 row d-flex justify-content-center">
-            <div class="col-lg-3 col-md-6">
+  <!--        <div class="filter-container p-0 row d-flex justify-content-center">-->
+  <!--          <div class="col-lg-4 col-md-6">-->
               <!-- small box -->
-              <div class="small-box bg-info">
-                <div class="inner">
-                  <h3>{{DB::table('nilai')->count()?:0}}</h3>
-                  <p>Laporan Seluruh</p>
-                </div>
-                <div class="icon">
-                  <i class="nav-icon fas fa-graduation-cap"></i>
-                </div>
-                <p class="small-box-footer">Jumlah Laporan Seluruh</p>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
+  <!--            <div class="small-box bg-info">-->
+  <!--              <div class="inner">-->
+  <!--                <h3>{{DB::table('nilai')->where('id_beasiswa',1)->count()?:0}}</h3>-->
+  <!--                <p>Laporan Beasiswa Prestasi</p>-->
+  <!--              </div>-->
+  <!--              <div class="icon">-->
+  <!--                <i class="nav-icon fas fa-graduation-cap"></i>-->
+  <!--              </div>-->
+  <!--              <p class="small-box-footer">Laporan Beasiswa Prestasi</p>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--          <div class="col-lg-5 col-md-6">-->
               <!-- small box -->
-              <div class="small-box bg-success">
-                <div class="inner">
-                  <h3>{{DB::table('nilai')->count()?:0}}</h3>
-                  <p>Laporan Pendaftaran</p>
-                </div>
-                <div class="icon">
-                  <i class="nav-icon fas fa-graduation-cap"></i>
-                </div>
-                <p class="small-box-footer">Laporan Pendaftaran</p>
-              </div>
-            </div>
+  <!--            <div class="small-box bg-success">-->
+  <!--              <div class="inner">-->
+  <!--                <h3>{{DB::table('nilai')->where('id_beasiswa',2)->count()?:0}}</h3>-->
+  <!--                <p>Laporan Beasiswa Kurang Mampu</p>-->
+  <!--              </div>-->
+  <!--              <div class="icon">-->
+  <!--                <i class="nav-icon fas fa-graduation-cap"></i>-->
+  <!--              </div>-->
+  <!--              <p class="small-box-footer">Laporan Beasiswa Kurang Mampu</p>-->
+  <!--            </div>-->
+  <!--          </div>-->
             <!-- ./col -->
-            <div class="col-lg-3 col-md-6">
+  <!--          <div class="col-lg-3 col-md-6">-->
               <!-- small box -->
-              <div class="small-box bg-warning">
-                <div class="inner">
-                  {{-- <h3>{{DB::table('pesdik')->where('status',"Aktif")->count()}}</h3> --}}
-                  <h3>{{DB::table('nilai')->count()?:0}}</h3>
-                  <p>Perhitungan Beasiswa</p>
-                </div>
-                <div class="icon">
-                  <i class="nav-icon fas fa-child nav-icon"></i>
-                </div>
-                <p class="small-box-footer">Perhitungan Beasiswa</p>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
+  <!--            <div class="small-box bg-warning">-->
+  <!--              <div class="inner">-->
+  <!--                {{-- <h3>{{DB::table('pesdik')->where('status',"Aktif")->count()}}</h3> --}}-->
+  <!--                <h3>{{DB::table('nilai')->count()?:0}}</h3>-->
+  <!--                <p>Perhitungan Beasiswa</p>-->
+  <!--              </div>-->
+  <!--              <div class="icon">-->
+  <!--                <i class="nav-icon fas fa-child nav-icon"></i>-->
+  <!--              </div>-->
+  <!--              <p class="small-box-footer">Perhitungan Beasiswa</p>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--          <div class="col-lg-3 col-md-6">-->
               <!-- small box -->
              
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </section>-->
+  <!--</div>-->
   @endif
  
 

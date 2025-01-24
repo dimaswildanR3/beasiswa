@@ -35,7 +35,7 @@ class PesyaratanController extends Controller
         }
 
         $datas = \App\Nilai::get();
-        return view('Pesyaratan.index', compact('datas'));
+        return view('pesyaratan.index', compact('datas'));
     }
 
     
@@ -471,9 +471,7 @@ $siswa = $siswaQuery->get();
             $Pesyaratan->nis            = $request->input('nis');
             $siswa = \App\Siswa::where('id', $Pesyaratan->nis)->first();  
             $nilaip            = $request->input('nilaip');
-            $nilaibro = \App\NilaiPelajaran::where('nis', $Pesyaratan->nis)
-    ->where('tahun_pelajaran',  $nilaip)
-    ->first();
+            $nilaibro = $request->input('value');
     if (!$nilaibro) {
         return redirect()->back()->with('error', 'Nilai pelajaran tidak ditemukan untuk tahun ajaran yang dipilih.');
     }
@@ -481,25 +479,25 @@ $siswa = $siswaQuery->get();
             // die;
             $Kriteria = \App\Penilaian::where('id_kriteria',$Pesyaratan->id_kriteria)->get();  
             foreach ($Kriteria as $test){
-               if($nilaibro->nilai >= $test->keterangan){
+               if($nilaibro >= $test->keterangan){
                 $Pesyaratan->nilai = $test->bobot;
                 // dd($Pesyaratan->nilai);
             }
             }
             foreach ($Kriteria as $testt){
-               if($nilaibro->penghasilan >= $testt->keterangan){
+               if($nilaibro >= $testt->keterangan){
                 $siswa->penghasilan = $testt->bobot;
                 // dd($Pesyaratan->penghasilan);
             }
             }
             foreach ($Kriteria as $testi){
-               if($nilaibro->tanggungan >= $testi->keterangan){
+               if($nilaibro >= $testi->keterangan){
                 $siswa->tanggungan = $testi->bobot;
                 // dd($Pesyaratan->tanggungan);
             }
             }
             foreach ($Kriteria as $ti){
-               if($nilaibro->jarak >= $ti->keterangan){
+               if($nilaibro >= $ti->keterangan){
                 $Pesyaratan->jarak = $ti->bobot;
             }
         }
@@ -546,9 +544,11 @@ $siswa = $siswaQuery->get();
         $Penilaian = Nilai::findOrFail($id);
         $Beasiswa = \App\Beasiswa::get();
         $Kriteria = \App\Kriteria::get();
+        // var_dump($Kriteria);
+        // die;
         $Siswa = \App\Siswa::get();
         $Model = \App\Models::get();
-        return view('Pesyaratan/edit', compact(['Kriteria','Penilaian','Siswa','Beasiswa','Model','nilaiajaran','Model' => $Model,'Beasiswa' => $Beasiswa,'kriteria' => $Kriteria,'Siswa' => $Siswa]));
+        return view('pesyaratan/edit', compact(['Kriteria','Penilaian','Siswa','Beasiswa','Model','nilaiajaran','Model' => $Model,'Beasiswa' => $Beasiswa,'kriteria' => $Kriteria,'Siswa' => $Siswa]));
 
     
     }
@@ -582,15 +582,13 @@ $siswa = $siswaQuery->get();
         $Pesyaratan->nis            = $request->input('nis');
         $siswa = \App\Siswa::where('id', $Pesyaratan->nis)->first();  
         $nilaip            = $request->input('nilaip');
-        $nilaibro = \App\NilaiPelajaran::where('nis', $Pesyaratan->nis)
-->where('tahun_pelajaran',  $nilaip)
-->first();
+        $nilaibro = $request->input('value');
 if (!$nilaibro) {
     return redirect()->back()->with('error', 'Nilai pelajaran tidak ditemukan untuk tahun ajaran yang dipilih.');
 }
         $Kriteria = \App\Penilaian::where('id_kriteria',$Pesyaratan->id_kriteria)->get();  
         foreach ($Kriteria as $test){
-           if($nilaibro->nilai >= $test->keterangan){
+           if($nilaibro >= $test->keterangan){
             $Pesyaratan->nilai = $test->bobot;
             // dd($Pesyaratan->nilai);
         }
@@ -602,13 +600,13 @@ if (!$nilaibro) {
         }
         }
         foreach ($Kriteria as $testi){
-           if($siswa->tanggungan >= $testi->keterangan){
+           if($nilaibro >= $testi->keterangan){
             $Pesyaratan->tanggungan = $testi->bobot;
             // dd($Pesyaratan->tanggungan);
         }
         }
         foreach ($Kriteria as $ti){
-           if($siswa->jarak >= $ti->keterangan){
+           if($nilaibro >= $ti->keterangan){
             $Pesyaratan->jarak = $ti->bobot;
         }
     }
