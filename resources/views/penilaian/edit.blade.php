@@ -37,7 +37,7 @@
         </div>
         @endif
         <form action="/penilaian/{{$Penilaian->id}}/update" method="POST" enctype="multipart/form-data">
-            <h4><i class="nav-icon fas fa-child my-1 btn-sm-1"></i> Edit Bobot</h4>
+            <h4><i class="nav-icon fas fa-child my-1 btn-sm-1"></i> Edit Rating Kriteria</h4>
             <hr>
             {{csrf_field()}}
             <div class="row">

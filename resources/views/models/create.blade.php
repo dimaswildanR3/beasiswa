@@ -37,7 +37,7 @@
         </div>
         @endif
         <form action="/models/store" method="POST" enctype="multipart/form-data">
-            <h4><i class="nav-icon fas fa-child my-1 btn-sm-1"></i> Tambah Models</h4>
+            <h4><i class="nav-icon fas fa-child my-1 btn-sm-1"></i> Tambah Bobot</h4>
             <hr>
             {{csrf_field()}}
             <div class="row">

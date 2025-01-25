@@ -161,35 +161,72 @@
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="/perhitunganbeasiswa/index" class="nav-link">
-                            <i class="nav-icon fas fa-layer-group"></i>
-                            <p>
-                                Penghitungan Beasiswa
-                            </p>
-                        </a>
-                    </li>
+                   
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-sharp fa-light fa-pen"></i>
                             <p>
-                                Data
+                                Master
                                 <i class="fas fa-angle-left right"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview bg-light">
+                           
                             <li class="nav-item">
-                                <a href="/siswa/index" class="nav-link text-black">
-                                    <i class="far fas fa-user nav-icon"></i>
-                                    <p>Siswa</p>
+                                <a href="/beasiswa/index" class="nav-link text-black">
+                                    <i class="fas fa-solid fa-wallet nav-icon"></i>
+                                    <p>Beasiswa</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="/kriteria/index" class="nav-link text-black">
+                                    <i class="fas fa-solid fa-wallet nav-icon"></i>
+                                    <p>Kriteria</p>
+                                </a>
+                            </li>
+                          
+                            <li class="nav-item">
+                                <a href="/penilaian/index" class="nav-link text-black">
+                                    <i class="fas fa-solid fa-marker nav-icon"></i>
+                                    <p>Rating Kriteria</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/models/index" class="nav-link text-black">
+                                    <i class="fas fa-solid fa-wallet nav-icon"></i>
+                                    <p>Bobot</p>
+                                </a>
+                            </li>
+                                <li class="nav-item">
+                                    <a href="/pesyaratan/index" class="nav-link text-black">
+                                        <i class="fas fa-check nav-icon"></i>
+                                        <p>Penilaian</p>
+                                    </a>
+                                </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="far fas fa-user nav-icon"></i>
+                            <p>
+                                Biodata
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview bg-light">
                             <li class="nav-item">
                                 <a href="/kelas/index" class="nav-link text-black">
                                     <i class="fas fa-book nav-icon"></i>
                                     <p>Kelas</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="/siswa/index" class="nav-link text-black">
+                                    <i class="far fas fa-user nav-icon"></i>
+                                    <p>Siswa</p>
+                                </a>
+                            </li>
+                           
                             <li class="nav-item">
                                 <a href="/orangtua/index" class="nav-link text-black">
                                     <i class="fas fa-users nav-icon"></i>
@@ -204,36 +241,13 @@
                                     <p>Nilai Ajaran</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="/beasiswa/index" class="nav-link text-black">
-                                    <i class="fas fa-solid fa-wallet nav-icon"></i>
-                                    <p>Beasiswa</p>
+                            
+                            {{-- <li class="nav-item">
+                                <a href="/laporanpendaftaran/index" class="nav-link text-black">
+                                    <i class="far fas fa fa-file nav-icon"></i>
+                                    <p>Laporan Pendaftaran</p>
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/kriteria/index" class="nav-link text-black">
-                                    <i class="fas fa-solid fa-wallet nav-icon"></i>
-                                    <p>Kriteria</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/models/index" class="nav-link text-black">
-                                    <i class="fas fa-solid fa-wallet nav-icon"></i>
-                                    <p>Model</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/penilaian/index" class="nav-link text-black">
-                                    <i class="fas fa-solid fa-marker nav-icon"></i>
-                                    <p>Bobot</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/pesyaratan/index" class="nav-link text-black">
-                                    <i class="fas fa-check nav-icon"></i>
-                                    <p>Penilaian</p>
-                                </a>
-                            </li>
+                            </li>                         --}}
                         </ul>
                     </li>
                     <li class="nav-item has-treeview">
@@ -245,6 +259,14 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview bg-light">
+                            <li class="nav-item">
+                                <a href="/perhitunganbeasiswa/index" class="nav-link">
+                                    <i class="nav-icon fas fa-layer-group"></i>
+                                    <p>
+                                        Penghitungan Beasiswa
+                                    </p>
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a href="/laporansiswa/index" class="nav-link text-black">
                                     <i class="far fas fa-user nav-icon"></i>

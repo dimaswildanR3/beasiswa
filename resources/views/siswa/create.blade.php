@@ -41,6 +41,13 @@
             <hr>
             {{csrf_field()}}
             <div class="row">
+
+                <div class="col-md-12">
+                    <label for="tahun">Tahun Angkatan</label>
+                    <input value="{{old('tahun')}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="Tahun Angkatan" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                </div>
+                {{-- d --}}
+                <br><br><br><br>
                 <div class="col-md-6">
                     <label for="nama">Nama Siswa</label>
                     <input value="{{old('nama')}}" name="nama" type="text" class="form-control" id="nama" placeholder="Nama Siswa" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
@@ -55,8 +62,7 @@
                         <option value="Laki-Laki">Laki-laki</option>
                         <option value="Perempuan">Perempuan</option>
                     </select>
-                    <label for="tahun">Tahun Angkatan</label>
-                    <input value="{{old('tahun')}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="Tahun Angkatan" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                  
                     <label for="kelas">Kelas</label>
                     <select name="kelas" class="form-control" id="kelas" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
                         <option value="">Pilih Kelas</option>
@@ -68,6 +74,7 @@
                     </select>
                     
                 </div>
+               
                 <!--<div class="col-md-6">-->
                 <!--    {{-- <div class="col-md-6"> --}}-->
                 <!--        <label for="penghasilan">Penghasilan Orang Tua</label>-->

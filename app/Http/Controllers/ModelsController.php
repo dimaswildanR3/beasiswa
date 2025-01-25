@@ -59,7 +59,7 @@ class ModelsController extends Controller
             $Models = new Models;
             $Models->id_beasiswa             = $request->input('id_beasiswa');
             $Models->id_kriteria            = $request->input('id_kriteria');
-            $Models->bobot          = $request->input('bobot')/100;
+            $Models->bobot          = $request->input('bobot');
             // $Models->penerbit        = $request->input('penerbit');
             // $Models->Jenis_kelamin   = $request->input('Jenis_kelamin');      
             $Models->save();
@@ -116,7 +116,7 @@ class ModelsController extends Controller
         $Models = Models::where('id', $id)->first();
         $Models->id_beasiswa             = $request->input('id_beasiswa');
         $Models->id_kriteria            = $request->input('id_kriteria');
-        $Models->bobot          = $request->input('bobot')/100;
+        $Models->bobot          = $request->input('bobot');
         // $Models->penerbit        = $request->input('penerbit');
         // $Models->Jenis_kelamin   = $request->input('Jenis_kelamin');      
         $Models->update();

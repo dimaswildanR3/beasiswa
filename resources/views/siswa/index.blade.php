@@ -111,7 +111,8 @@
                                 <th><div style="width: 110px;">Nama</div></th>
                                 <th><div style="width: 110px;">Alamat</div></th>
                                 <th><div style="width: 110px;">Jenis Kelamin</div></th>
-                                <th><div style="width: 110px;">Tahun Ajaran</div></th>
+                                <th><div style="width: 110px;">Tahun Angkatan</div></th>
+                                <th><div style="width: 110px;">Tahun Pelajaran</div></th>
                                 <th><div style="width: 110px;">Kelas</div></th>
                                 <th><center>Aksi</center></th>
                             </tr>
@@ -125,6 +126,8 @@
                                 <td>{{ $siswa->alamat }}</td>
                                 <td>{{ $siswa->jenis_kelamin }}</td>
                                 <td>{{ $siswa->tahun }}</td>
+                                <td>{{ now()->year }}/{{ now()->year + 1 }}</td>
+
                                 <td>{{ $siswa->Kelas->nama_kelas ?? 'kelas belum di isi' }}</td>
                                 <td class="text-center">
                                     <div class="btn-group">

@@ -25,6 +25,64 @@ class OrangtuaController extends Controller
     public function store(Request $request)
     {
         foreach ($request->orangtua as $siswa_id => $data) {
+            $existingOrangtua = Orangtua::where('nis', $data['id'])
+            ->where('angkatan', $data['tahun'])
+            ->first();
+
+            if ($existingOrangtua) {
+                // If record exists, return with an error message
+                return back()->withErrors(['error' => 'Data ']);
+            }
+            $Pesyaratan      = new Nilai;
+
+            
+            $penghasilan =$data['penghasilan'];
+           $model = \App\Penilaian::where('id', $Pesyaratan->id_model)->first();
+        var_dump($penghasilan);
+        die;
+               $Pesyaratan->id_beasiswa          = $model->id_beasiswa;
+               $Pesyaratan->id_kriteria            = $model->id_kriteria;
+               
+           // $Pesyaratan     ->keterangan            = $request->input('ketex rangan');
+           $Pesyaratan->nis            = $request->input('nis');
+           $siswa = \App\Siswa::where('id', $Pesyaratan->nis)->first();  
+           $nilaip            = $request->input('nilaip');
+           $nilaibro = $request->input('value');
+   if (!$nilaibro) {
+       return redirect()->back()->with('error', 'Nilai pelajaran tidak ditemukan untuk tahun ajaran yang dipilih.');
+   }
+           // var_dump($nilaibro->nilai);
+           // die;
+           $Kriteria = \App\Penilaian::where('id_kriteria',$Pesyaratan->id_kriteria)->get();  
+           foreach ($Kriteria as $test){
+              if($nilaibro >= $test->keterangan){
+               $Pesyaratan->nilai = $test->bobot;
+               // dd($Pesyaratan->nilai);
+           }
+           }
+           foreach ($Kriteria as $testt){
+              if($nilaibro >= $testt->keterangan){
+               $siswa->penghasilan = $testt->bobot;
+               // dd($Pesyaratan->penghasilan);
+           }
+           }
+           foreach ($Kriteria as $testi){
+              if($nilaibro >= $testi->keterangan){
+               $siswa->tanggungan = $testi->bobot;
+               // dd($Pesyaratan->tanggungan);
+           }
+           }
+           foreach ($Kriteria as $ti){
+              if($nilaibro >= $ti->keterangan){
+               $Pesyaratan->jarak = $ti->bobot;
+           }
+       }
+       // dd($Pesyaratan->jarak);
+           $Pesyaratan->tahun   =  $nilaip;
+        
+       // var_dump($Pesyaratan);
+       // die;
+           $Pesyaratan->save();
             // var_dump($data);
             // die;
             Orangtua::create([
