@@ -40,6 +40,14 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/kelas/{id}/show', 'KelasController@show');
     Route::get('/kelas/{id}/delete', 'KelasController@destroy');
 
+    Route::get('/orangtua/index', 'OrangtuaController@index')->name('orangtua.index');
+    Route::get('/orangtua/create', 'OrangtuaController@create');
+    Route::get('/orangtua/{id}/edit', 'OrangtuaController@edit');
+    Route::post('/orangtua/store', 'OrangtuaController@store')->name('orangtua.store');
+    Route::post('/orangtua/{id}/update', 'OrangtuaController@update');
+    Route::get('/orangtua/{id}/show', 'OrangtuaController@show');
+    Route::get('/orangtua/{id}/delete', 'OrangtuaController@destroy');
+
    
     Route::get('/penilaian/index', 'PenilaianController@index')->name('penilaian');
     Route::get('/penilaian/create', 'PenilaianController@create');

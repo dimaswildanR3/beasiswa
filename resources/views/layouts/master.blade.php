@@ -190,6 +190,13 @@
                                     <p>Kelas</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="/orangtua/index" class="nav-link text-black">
+                                    <i class="fas fa-users nav-icon"></i>
+                                    <p>Orangtua</p>
+                                </a>
+                            </li>
+                            
                             
                             <li class="nav-item">
                                 <a href="/nilaipelajaran/index" class="nav-link text-black">

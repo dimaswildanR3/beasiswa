@@ -21,12 +21,37 @@ class SiswaController extends Controller
          *
          * @return \Illuminate\Http\Response
          */
-    
-        public function __construct()
+        public function getSiswa(Request $request)
         {
-            $this->middleware('auth');
+            $tahunAngkatan = $request->input('tahun_angkatan');
+            $kelas = $request->input('kelas');
+        
+            // Query siswa berdasarkan tahun dan kelas
+            $siswa = DB::table('siswa')
+                ->where('tahun', $tahunAngkatan)
+                ->where('kelas', $kelas)
+                ->get();
+        
+            // Mengembalikan hasil dalam bentuk JSON
+            return response()->json($siswa);
         }
     
+        // public function __construct()
+        // {
+        //     $this->middleware('auth');
+        // }
+    
+       
+        
+
+        public function filter(Request $request)
+{
+    $siswa = Siswa::where('tahun', $request->tahun)
+                ->where('kelas', $request->kelas)
+                ->get();
+    return response()->json($siswa);
+}
+
         public function index(Request $request)
         {
             // Ambil data filter dari request
