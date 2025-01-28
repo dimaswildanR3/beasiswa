@@ -62,6 +62,7 @@ class PesyaratanController extends Controller
         $tahunMasukDipilih = $request->get('tahun_masuk');
         $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
         $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
+        $approveStatus = $request->get('aprove');
     
         // Filter data siswa berdasarkan input
         $siswaQuery = Nilai::with(['siswa', 'beasiswa', 'nilaipelajaran'])
@@ -74,6 +75,8 @@ class PesyaratanController extends Controller
                 $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
                     $query->where('tahun_pelajaran', $tahunPelajaranDipilih);
                 });
+            })->when($approveStatus, function ($query) use ($approveStatus) {
+                $query->where('aprove', $approveStatus);  // Filter berdasarkan status approve
             })
             ->when($jenisBeasiswaDipilih, function ($query) use ($jenisBeasiswaDipilih) {
                 $query->whereHas('beasiswa', function ($query) use ($jenisBeasiswaDipilih) {
@@ -338,6 +341,7 @@ class PesyaratanController extends Controller
     $tahunMasukDipilih = $request->get('tahun_masuk');
     $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
     $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
+    $approveStatus = $request->get('aprove');
 
     // Filter data siswa berdasarkan input
     $siswaQuery = Nilai::with(['siswa', 'beasiswa', 'nilaipelajaran'])
@@ -348,6 +352,8 @@ class PesyaratanController extends Controller
         $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
             $query->where('tahun', $tahunMasukDipilih);
         });
+    })->when($approveStatus, function ($query) use ($approveStatus) {
+        $query->where('aprove', $approveStatus);  // Filter berdasarkan status approve
     })
     ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
         $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
@@ -459,6 +465,7 @@ $siswa = $siswaQuery->get();
     $tahunMasukDipilih = $request->get('tahun_masuk');
     $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
     $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
+    $approveStatus = $request->get('aprove');
 
     // Filter data siswa berdasarkan input
     $siswaQuery = Nilai::with(['siswa', 'beasiswa', 'nilaipelajaran'])
@@ -469,6 +476,8 @@ $siswa = $siswaQuery->get();
         $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
             $query->where('tahun', $tahunMasukDipilih);
         });
+    })->when($approveStatus, function ($query) use ($approveStatus) {
+        $query->where('aprove', $approveStatus);  // Filter berdasarkan status approve
     })
     ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
         $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {

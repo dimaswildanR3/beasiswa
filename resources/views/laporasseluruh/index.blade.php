@@ -47,7 +47,7 @@
         <!-- Filter Tahun Masuk, Tahun Pelajaran, and Jenis Beasiswa -->
         <form method="GET" action="{{ route('laporanseluruhsiswa') }}">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="tahun_masuk">Filter Tahun Masuk:</label>
                     <select name="tahun_masuk" id="tahun_masuk" class="form-control" onchange="this.form.submit()">
                         <option value="">-- Pilih Tahun Masuk --</option>
@@ -56,7 +56,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="tahun_pelajaran">Filter Tahun Pelajaran:</label>
                     <select name="tahun_pelajaran" id="tahun_pelajaran" class="form-control" onchange="this.form.submit()">
                         <option value="">-- Pilih Tahun Pelajaran --</option>
@@ -65,7 +65,7 @@
                         @endforeach
                     </select>
                 </div>
-                {{-- <div class="col-md-4">
+                {{-- <div class="col-md-3">
                     <label for="jenis_beasiswa">Filter Jenis Beasiswa:</label>
                     <select name="jenis_beasiswa" id="jenis_beasiswa" class="form-control" onchange="this.form.submit()">
                         <option value="">-- Pilih Jenis Beasiswa --</option>
@@ -74,12 +74,20 @@
                         @endforeach
                     </select>
                 </div> --}}
+                <div class="col-md-3">
+                    <label for="aprove">Filter Approval Status:</label>
+                    <select name="aprove" id="aprove" class="form-control" onchange="this.form.submit()">
+                        <option value="">-- Pilih Status Approval --</option>
+                        <option value="1" {{ request('aprove') == '1' ? 'selected' : '' }}>Approve</option>
+                        <option value="0" {{ request('aprove') == '0' ? 'selected' : '' }}>Belum Di Aprove</option>
+                    </select>
+                </div>
             </div>
         </form>
 
         <br>
 
-        @if(request('tahun_masuk') || request('tahun_pelajaran') || request('jenis_beasiswa'))
+        @if(request('tahun_masuk') || request('tahun_pelajaran') || request('jenis_beasiswa') || request('aprove'))
             <div class="alert alert-info">
                 Menampilkan data untuk:
                 @if(request('tahun_masuk')) 
@@ -93,7 +101,14 @@
                 @endif
                 @if(request('jenis_beasiswa'))
                     dan Jenis Beasiswa <strong>{{ request('jenis_beasiswa') }}</strong>
+                    @endif
+                @if(request('aprove'))
+                @if(request('aprove') == 1)
+                    Approval Status: <strong>Approve</strong>
+                @elseif(request('aprove') == 0)
+                    Approval Status: <strong>Belum di Approve</strong>
                 @endif
+            @endif
                 . 
                 <a href="{{ route('laporanseluruhsiswa') }}" class="btn btn-sm btn-warning">Reset</a>
             </div>
