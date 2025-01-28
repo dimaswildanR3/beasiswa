@@ -130,8 +130,8 @@
                         <tr class="bg-light">
                             <th>NIS</th>
                             <th><div style="width:110px;">Nama</div></th>
-                            <th><div style="width:80px;">Tahun Angkatan</div></th>
-                            <th><div style="width:80;">Tahun Pelajaran</div></th>
+                            <th><div style="width:70px;">Tahun Angkatan</div></th>
+                            <th><div style="width:70px;">Tahun Pelajaran</div></th>
                             <th><div style="width:110px;">Kelas</div></th>
                             <th><div style="width:110px;">Jenis Beasiswa</div></th>
                             <th>Nilai Preferensi</th>
