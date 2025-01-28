@@ -19,6 +19,7 @@ Route::get('/logout', 'AuthController@logout');
 //Route untuk user Admin
 Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/siswa/index', 'SiswaController@index')->name('siswa');
+    Route::get('/siswa/indexnon', 'SiswaController@indexnon')->name('siswanon');
     Route::get('/siswa/copy', 'SiswaController@copyData')->name('siswa.copy');
     Route::post('/siswa/copy', 'SiswaController@storeCopiedData')->name('siswa.storeCopy');
   
@@ -53,7 +54,7 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/penilaian/create', 'PenilaianController@create');
     Route::get('/penilaian/{id}/show', 'PenilaianController@show');
     Route::post('/penilaian/store', 'PenilaianController@store');
-    Route::get('/penilaian/{id}/edit', 'PenilaianController@edit');
+    Route::get('/nilaipelajaran/{id}/edit', 'PenilaianController@edit');
     Route::post('/penilaian/{id}/update', 'PenilaianController@update');
     Route::get('/penilaian/{id}/delete', 'PenilaianController@delete');
 
@@ -66,6 +67,9 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/laporansiswa/export_excel', 'PesyaratanController@export_excel');
     Route::get('/laporasseluruh/export_excel', 'PesyaratanController@export_excelll');
     Route::get('/perhitunganbeasiswa/index', 'PesyaratanController@indeex')->name('perhitunganbeasiswa');
+    Route::get('/approve/index', 'PesyaratanController@approve')->name('approve');
+    Route::get('/approve/histori', 'PesyaratanController@histori')->name('histori');
+    Route::put('/approved/{id}/aproved', 'PesyaratanController@aproveupdate')->name('approve.update');
     Route::get('/perhitunganbeasiswa/export_excel', 'PesyaratanController@export_excell');
     Route::get('/pesyaratan/index', 'PesyaratanController@index')->name('pesyaratan');
     Route::get('/laporasseluruh/index', 'PesyaratanController@indexxs')->name('laporanseluruhsiswa');
@@ -193,8 +197,8 @@ Route::group(['middleware' => ['auth', 'checkRole:admin,PetugasAdministrasiKeuan
 Route::get('/nilaipelajaran/create', 'NilaiPelajaranController@create')->name('nilaipelajaran.create');
 Route::post('/nilaipelajaran/store', 'NilaiPelajaranController@store')->name('nilaipelajaran.store');
 Route::get('/nilaipelajaran/{id}/edit', 'NilaiPelajaranController@edit')->name('nilaipelajaran.edit');
-Route::post('/nilaipelajaran/{id}/update', 'NilaiPelajaranController@update')->name('nilaipelajaran.update');
-Route::post('/nilaipelajaran/{id}/delete', 'NilaiPelajaranController@destroy')->name('nilaipelajaran.destroy');
+Route::post('/nilaipelajaran/update', 'NilaiPelajaranController@update')->name('nilaipelajaran.update');
+Route::get('/nilaipelajaran/{ni}/delete', 'NilaiPelajaranController@destroy')->name('nilaipelajaran.destroy');
 Route::post('/nilaipelajaran/filter', 'NilaiPelajaranController@filter')->name('nilaipelajaran.filter');
 Route::get('/nilaipelajaran/{filter}/print', 'NilaiPelajaranController@print')->name('nilaipelajaran.print');
 

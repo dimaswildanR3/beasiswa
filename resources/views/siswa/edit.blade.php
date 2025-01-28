@@ -37,7 +37,7 @@
         </div>
         @endif
         <form action="/siswa/{{$siswa->id}}/update" method="POST" enctype="multipart/form-data">
-            <h4><i class="nav-icon fas fa-child my-1 btn-sm-1"></i> Edit Data Siswa</h4>
+            <h4><i class="nav-icon fas fa-child my-1 btn-sm-1"></i> Edit Biodata Siswa</h4>
             <hr>
             {{csrf_field()}}
             <div class="row">
@@ -53,8 +53,24 @@
                         <option value="Laki-Laki" @if ($siswa->Jenis_kelamin == 'Laki-Laki') selected @endif>Laki-Laki</option>
                         <option value="Perempuan" @if ($siswa->Jenis_kelamin == 'Perempuan') selected @endif>Perempuan</option>
                     </select>
-                    <label for="tahun">Tahun Angkatan</label>
-                    <input value="{{$siswa->tahun}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="Tahun Angkatan" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                    <label for="aktif">Status</label>
+                    <select name="aktif" class="form-control" id="aktif" required>
+                        <option value="Y" @if ($siswa->aktif == 'Y') selected @endif>Aktif</option>
+                        <option value="N" @if ($siswa->aktif == 'N') selected @endif>Nonaktif</option>
+                    </select>
+                    <label for="tahun">Tahun Ajaran</label>
+                    <input value="{{$siswa->tahun}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="Tahun Ajaran" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                    <div class="col-md-12">
+                        <label for="tahun_pelajaran">Tahun Pelajaran</label>
+                        <select name="tahun_pelajaran" class="form-control" id="tahun_pelajaran" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
+                            <option value="">-- Pilih Tahun Pelajaran --</option>
+                            @for ($i = date('Y'); $i >= 2000; $i--)
+                                <option value="{{ $i }}/{{ $i+1 }}" {{ old('tahun_pelajaran') == "$i/$i+1" ? 'selected' : '' }}>
+                                    {{ $i }}/{{ $i+1 }}
+                                </option>
+                            @endfor
+                        </select>
+                    </div>
                     <label for="kelas">Kelas</label>
                     <select name="kelas" class="form-control" id="kelas" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
                         <option value="">Pilih Kelas</option>
@@ -72,8 +88,8 @@
             <!--        <input value="{{$siswa->tanggungan}}" name="tanggungan" type="number" class="form-control" id="tanggungan" placeholder="tanggungan" >-->
             <!--        <label for="penghasilan">Penghasilan Orang Tua</label>-->
             <!--        <input value="{{$siswa->penghasilan}}" name="penghasilan" type="number" class="form-control" id="penghasilan" placeholder="penghasilan" >-->
-            <!--        <label for="tahun">Tahun Angkatan</label>-->
-            <!--        <input value="{{$siswa->tahun}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="Tahun Angkatan" >-->
+            <!--        <label for="tahun">Tahun Pelajaran</label>-->
+            <!--        <input value="{{$siswa->tahun}}" name="tahun" type="number" class="form-control" id="tahun" placeholder="Tahun Pelajaran" >-->
             <!--        {{-- <label for="nilai">Nilai</label>-->
             <!--        <input value="{{$siswa->nilai}}" name="nilai" type="number" class="form-control" id="nilai" placeholder="nilai" > --}}-->
             <!--        {{-- <label for="jarak">Jarak</label>-->

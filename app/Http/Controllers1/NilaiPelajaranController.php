@@ -18,7 +18,7 @@ class NilaiPelajaranController extends Controller
     // Menampilkan form tambah data
     public function create()
     {
-        $siswa = Siswa::all();
+        $siswa =  Siswa::where('aktif','Y')->get();
         return view('nilaipelajaran.create', compact('siswa'));
     }
 
@@ -57,7 +57,7 @@ class NilaiPelajaranController extends Controller
     public function edit($id)
     {
         $nilaipelajaran = NilaiPelajaran::findOrFail($id);
-        $siswa = Siswa::all();
+        $siswa =  Siswa::where('aktif','Y')->get();
         return view('nilaipelajaran.edit', compact('nilaipelajaran', 'siswa'));
     }
 

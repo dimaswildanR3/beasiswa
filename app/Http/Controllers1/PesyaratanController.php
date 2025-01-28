@@ -98,29 +98,79 @@ class PesyaratanController extends Controller
         }
     
         // Normalisasi dan hitung nilai preferensi
-        foreach ($siswa as $s) {
-            $totalPreferensi = 0;
     
-            foreach ($kriteria as $k) {
-                $nilai = Nilai::where('nis', $s->siswa->id)
-                              ->where('id_kriteria', $k->id)
-                              ->value('nilai') ?? 0;
+        // Urutkan berdasarkan nilai preferensi
+        $siswa = $siswa->sortByDesc('nilai_preferensi')->values();
     
-                if ($k->sifat == 'Benefit') {
-                    $normalizedValue = $maxValues[$k->id] != 0 ? $nilai / $maxValues[$k->id] : 0;
-                } else {
-                    $normalizedValue = $nilai != 0 ? $minValues[$k->id] / $nilai : 0;
-                }
+        return view('perhitunganbeasiswa.index', compact(
+            'beasiswa', 'tahunMasukList', 'tahunPelajaranList', 'jenisBeasiswaList',
+            'tahunMasukDipilih', 'tahunPelajaranDipilih', 'jenisBeasiswaDipilih', 'siswa'
+        ));
+    }
     
-                $model = Models::where('id_kriteria', $k->id)->first();
+
+
+
     
-                if ($model && isset($model->bobot)) {
-                    $totalPreferensi += $normalizedValue * $model->bobot;
-                }
-            }
-    
-            $s->nilai_preferensi = $totalPreferensi;
+    public function approve(Request $request)
+    {
+        // Cek apakah user adalah admin
+        if (Auth::user()->level == 'admin') {
+            Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
+            return redirect()->to('/');
         }
+    
+        // Ambil tahun unik dari tabel siswa (tahun masuk)
+        $tahunMasukList = Siswa::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+    
+        // Ambil tahun pelajaran unik dari tabel nilaipelajaran
+        $tahunPelajaranList = NilaiPelajaran::select('tahun_pelajaran')->distinct()->orderBy('tahun_pelajaran', 'desc')->pluck('tahun_pelajaran');
+    
+        // Ambil jenis beasiswa unik dari tabel beasiswa
+        $jenisBeasiswaList = Beasiswa::select('nama_beasiswa')->distinct()->pluck('nama_beasiswa');
+    
+        // Ambil tahun yang dipilih dari request
+        $tahunMasukDipilih = $request->get('tahun_masuk');
+        $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
+        $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
+    
+        // Filter data siswa berdasarkan input
+        $siswaQuery = Nilai::with(['siswa', 'beasiswa', 'nilaipelajaran'])
+            ->when($tahunMasukDipilih, function ($query) use ($tahunMasukDipilih) {
+                $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
+                    $query->where('tahun', $tahunMasukDipilih);
+                });
+            })
+            ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
+                $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
+                    $query->where('tahun_pelajaran', $tahunPelajaranDipilih);
+                });
+            })
+            ->when($jenisBeasiswaDipilih, function ($query) use ($jenisBeasiswaDipilih) {
+                $query->whereHas('beasiswa', function ($query) use ($jenisBeasiswaDipilih) {
+                    $query->where('nama_beasiswa', $jenisBeasiswaDipilih);
+                });
+            });
+    
+        $siswa = $siswaQuery->get();
+    
+        // Ambil semua data beasiswa
+        $beasiswa = Beasiswa::all();
+    
+        // === Proses Perhitungan SAW ===
+        $kriteria = Kriteria::with('model')->get();
+        $maxValues = [];
+        $minValues = [];
+    
+        foreach ($kriteria as $k) {
+            if ($k->sifat == 'Benefit') {
+                $maxValues[$k->id] = Nilai::where('id_kriteria', $k->id)->max('nilai');
+            } else {
+                $minValues[$k->id] = Nilai::where('id_kriteria', $k->id)->min('nilai');
+            }
+        }
+    
+        // Normalisasi dan hitung nilai preferensi
     
         // Urutkan berdasarkan nilai preferensi
         $siswa = $siswa->sortByDesc('nilai_preferensi')->values();

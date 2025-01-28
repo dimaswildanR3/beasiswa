@@ -44,28 +44,22 @@
         {{-- Title --}}
         <div class="row mb-3">
             <div class="col">
-                <h4><i class="nav-icon fas fa-child my-0 btn-sm-1"></i> Biodata Siswa</h4>
+                <h4><i class="nav-icon fas fa-child my-0 btn-sm-1"></i> Biodata Siswa Tidak Aktif</h4>
                 <hr>
             </div>
         </div>
 
       {{-- Add Data and Copy Data Button --}}
-      <div class="mb-3">
-        <div class="d-flex">
-            <a class="btn btn-primary btn-sm mr-2" href="create" role="button">
-                <i class="fas fa-plus"></i> Tambah Data
-            </a>
-            <a class="btn btn-secondary btn-sm" href="copy" role="button">
-                <i class="fas fa-copy"></i> Copy Data
-            </a>
-            <!-- Tombol Siswa Tidak Aktif yang dipindahkan ke kanan dengan warna berbeda -->
-            <a class="btn btn-danger btn-sm ml-auto" href="{{ route('siswanon') }}" role="button">
-                <i class="fas fa-user-slash"></i> Siswa Tidak Aktif
-            </a>
-            
-        </div>
+{{-- <div class="mb-3">
+    <div class="d-flex">
+        <a class="btn btn-primary btn-sm mr-2" href="create" role="button">
+            <i class="fas fa-plus"></i> Tambah Data
+        </a>
+        <a class="btn btn-secondary  btn-sm" href="copy" role="button">
+            <i class="fas fa-copy"></i> Copy Data
+        </a>
     </div>
-    
+</div> --}}
 
 
         {{-- Filter Form --}}

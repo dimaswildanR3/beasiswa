@@ -39,7 +39,7 @@
 
         <form action="{{ route('orangtua.store') }}" method="POST" id="orangtuaForm">
             @csrf
-            <h4><i class="nav-icon fas fa-user-friends"></i> Tambah Data Orangtua</h4>
+            <h4><i class="nav-icon fas fa-user-friends"></i> Tambah Biodata Orangtua</h4>
             <hr>
 
             <div class="row">
@@ -49,6 +49,13 @@
                         <option value="">-- Pilih Tahun Angkatan --</option>
                         @foreach($tahun as $t)
                             <option value="{{ $t->tahun }}">{{ $t->tahun }}</option>
+                        @endforeach
+                    </select>
+                    <label for="tahun_pelajaran">Tahun Pelajaran</label>
+                    <select name="tahun_pelajaran" id="tahun_pelajaran" class="form-control" required>
+                        <option value="">-- Pilih Tahun Angkatan --</option>
+                        @foreach($tahunajaran as $ti)
+                            <option value="{{ $ti->tahun_pelajaran }}">{{ $ti->tahun_pelajaran }}</option>
                         @endforeach
                     </select>
 
@@ -90,48 +97,59 @@
 </section>
 
 <script>
-    document.getElementById('tampilkan-siswa').addEventListener('click', function () {
-      var tahun = document.getElementById('tahun_angkatan').value;
-      var kelas = document.getElementById('kelas').value;
-  
-      if (tahun && kelas) {
-          fetch(`/api/siswa?tahun_angkatan=${tahun}&kelas=${kelas}`)
-              .then(response => response.json())
-              .then(data => {
-                  var siswaList = document.getElementById('siswa-list');
-                  siswaList.innerHTML = '';  // Bersihkan daftar siswa sebelumnya
-  
-                  data.forEach(siswa => {
-                      siswaList.innerHTML += `
-                          <tr>
-                              <td>${siswa.nis}</td>
-                              <td>${siswa.nama}</td>
-                              <td><input type="text" name="orangtua[${siswa.id}][nama_orangtua]" class="form-control" required></td>
-                              <td>
-                                  <select name="orangtua[${siswa.id}][jenis_kelamin]" class="form-control" required>
-                                      <option value="Laki-Laki">Laki-laki</option>
-                                      <option value="Perempuan">Perempuan</option>
-                                  </select>
-                              </td>
-                              <td><input type="number" name="orangtua[${siswa.id}][penghasilan]" class="form-control" required></td>
-                              <td><input type="number" name="orangtua[${siswa.id}][tanggungan]" class="form-control" required></td>
-                              <!-- Menambahkan NIS dan Nama Siswa sebagai input tersembunyi -->
-                              <input type="hidden" name="orangtua[${siswa.id}][id]" value="${siswa.id}">
-                              <input type="hidden" name="orangtua[${siswa.id}][nama]" value="${siswa.nama}">
-                              <input type="hidden" name="orangtua[${siswa.id}][tahun]" value="${siswa.tahun}">
-                              <input type="hidden" name="orangtua[${siswa.id}][kelas]" value="${siswa.kelas}">
-                          </tr>
-                      `;
-                  });
+  document.getElementById('tampilkan-siswa').addEventListener('click', function () {
+    var tahun = document.getElementById('tahun_angkatan').value;
+    var kelas = document.getElementById('kelas').value;
+    var tahunpelajaran = document.getElementById('tahun_pelajaran').value;
 
-                  // Mengaktifkan tombol simpan setelah siswa ditampilkan
-                  document.getElementById('saveButton').disabled = false;
-              })
-              .catch(error => console.error('Error:', error));
-      } else {
-          alert("Tahun angkatan dan kelas harus dipilih");
-      }
-  });
+    // Reset daftar siswa sebelum menampilkan data baru
+    var siswaList = document.getElementById('siswa-list');
+    siswaList.innerHTML = '';  // Bersihkan daftar siswa sebelumnya
+
+    // Reset tombol simpan
+    document.getElementById('saveButton').disabled = true;
+
+    if (tahun && kelas) {
+        fetch(`/api/siswa?tahun_angkatan=${tahun}&kelas=${kelas}&tahun_pelajaran=${tahunpelajaran}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);  // Menampilkan error dari API jika data tidak ditemukan
+                } else {
+                    data.forEach(siswa => {
+                        siswaList.innerHTML += `
+                            <tr>
+                                <td>${siswa.nis}</td>
+                                <td>${siswa.nama}</td>
+                                <td><input type="text" name="orangtua[${siswa.id}][nama_orangtua]" class="form-control" required></td>
+                                <td>
+                                    <select name="orangtua[${siswa.id}][jenis_kelamin]" class="form-control" required>
+                                        <option value="Laki-Laki">Laki-laki</option>
+                                        <option value="Perempuan">Perempuan</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" name="orangtua[${siswa.id}][penghasilan]" class="form-control" required></td>
+                                <td><input type="number" name="orangtua[${siswa.id}][tanggungan]" class="form-control" required></td>
+                                <!-- Menambahkan NIS dan Nama Siswa sebagai input tersembunyi -->
+                                <input type="hidden" name="orangtua[${siswa.id}][id]" value="${siswa.id}">
+                                <input type="hidden" name="orangtua[${siswa.id}][nama]" value="${siswa.nama}">
+                                <input type="hidden" name="orangtua[${siswa.id}][tahun]" value="${siswa.tahun}">
+                                <input type="hidden" name="orangtua[${siswa.id}][kelas]" value="${siswa.kelas}">
+                                <input type="hidden" name="orangtua[${siswa.id}][tahun_pelajaran]" value="${siswa.tahun_pelajaran}">
+                            </tr>
+                        `;
+                    });
+
+                    // Mengaktifkan tombol simpan setelah siswa ditampilkan
+                    document.getElementById('saveButton').disabled = false;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    } else {
+        alert("Tahun angkatan dan kelas harus dipilih");
+    }
+});
+
 
   // Validasi form sebelum submit
   document.getElementById('orangtuaForm').addEventListener('submit', function (event) {

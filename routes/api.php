@@ -15,6 +15,9 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/siswa', [SiswaController::class, 'getSiswa']);
+Route::get('/getsiswa', [SiswaController::class, 'getSiswa1']);
+Route::get('/getsiswaid', [SiswaController::class, 'getSiswaid']);
+Route::get('/getkelas', [SiswaController::class, 'getKelas']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

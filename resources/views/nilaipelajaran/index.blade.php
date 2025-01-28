@@ -37,7 +37,7 @@
         @endif
         <div class="row">
             <div class="col">
-                <h4><i class="nav-icon fas fa-child my-0 btn-sm-1"></i> Data Siswa</h3>
+                <h4><i class="fas fa-book nav-icon my-0 btn-sm-1"></i> Biodata Nilai Pelajaran</h3>
                 <hr>
             </div>
         </div>
@@ -47,48 +47,96 @@
                 <br>
             </div>
         </div>
+
+        <!-- Filter Form -->
+        <form action="{{ route('nilaipelajaran.index') }}" method="GET">
+            <div class="row mb-3">
+                <div class="col">
+                    <select name="tahun_angkatan" class="form-control" onchange="this.form.submit()">
+                        <option value="">Pilih Tahun Angkatan</option>
+                        @foreach($tahunAngkatan as $tahun)
+                            <option value="{{ $tahun }}" {{ request('tahun_angkatan') == $tahun ? 'selected' : '' }}>{{ $tahun }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col">
+                    <select name="tahun_pelajaran" class="form-control" onchange="this.form.submit()">
+                        <option value="">Pilih Tahun Pelajaran</option>
+                        @foreach($tahunPelajaran as $tahun)
+                            <option value="{{ $tahun }}" {{ request('tahun_pelajaran') == $tahun ? 'selected' : '' }}>{{ $tahun }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col">
+                    <select name="kelas" class="form-control" onchange="this.form.submit()">
+                        <option value="">Pilih Kelas</option>
+                        @foreach($kelas as $kls)
+                            <option value="{{ $kls->nama_kelas }}" {{ request('kelas') == $kls->nama_kelas ? 'selected' : '' }}>{{ $kls->nama_kelas }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                {{-- <div class="col">
+                    <select name="semester" class="form-control" onchange="this.form.submit()">
+                        <option value="">Pilih Semester</option>
+                        @foreach($semesters as $smt)
+                        <option value="{{ $smt }}" {{ request('semester') == $smt ? 'selected' : '' }}>{{ $smt }}</option>
+                    @endforeach
+                    </select>
+                </div> --}}
+            </div>
+        </form>
+        
+
         <div class="row">
             <div class="row table-responsive">
                 <div class="col-12">
-                    <table class="table table-hover table-head-fixed" id='tabelAgendaMasuk'>
+                    <table class="table table-hover table-head-fixed" id="tabelAgendaMasuk">
                         <thead>
                             <tr class="bg-light">
-                        {{-- <thead>
-                            <tr class="bg-light"> --}}
                                 <th>No.</th>
+                                <th>Nis</th>
                                 <th>Nama</th>
-                                <th><div style="width:110px;">Nilai</div></th>
-                                <th><div style="width:210px;">Tahun Pelajaran</div></th>
-                                {{-- <th><div style="width:110px;">Jenis Kelamin</div></th> --}}
-                                <th><center> Aksi</center></th>
+                                <th>Tahun Angkatan</th>
+                                <th>Tahun Pelajaran</th>
+                                @foreach($kriteria as $k)
+                                    <th>{{ $k->nama }}</th> <!-- Display subject name -->
+                                @endforeach
+                                <th>Kelas</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $no = 0; ?>
-                            @foreach($datas as $siswa)
-                            <?php $no++; ?>
+                            @foreach($students as $nis => $student)
                             <tr>
-                                <td>{{$no}}</td>
-                                <td>{{$siswa->siswa->nama}}</td>
-                                <td>{{$siswa->nilai}}</td>
-                                <td>{{$siswa->tahun_pelajaran}}</td>
-                                {{-- <td>{{$siswa->jenis_kelamin}}</td> --}}
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $student['nis'] }}</td>
+                                <td>{{ $student['nama'] }}</td>
+                                <td>{{ $student['tahun_angkatan'] }}</td>
+                                <td>{{ $student['tahun_pelajaran'] }}</td>
+                                @foreach($kriteria as $k)
+                                    <td>
+                                        @if(isset($student[$k->id]))
+                                            {{ $student[$k->id]['nilai'] }} <!-- Display grade -->
+                                        @else
+                                            N/A <!-- If no grade, show N/A -->
+                                        @endif
+                                    </td>
+                                @endforeach
+                                <td>{{ $student['kelas'] }}</td>
+                                {{-- @php
+                                    var_dump($student);
+                                @endphp --}}
                                 <td>
-                                    <center>
-                                    <div class="ok"style="width:220px;">
-                                    <a href="/nilaipelajaran/{{$siswa->id}}/edit" class="btn btn-primary btn-sm my-1 mr-sm-1"><i class="nav-icon fas fa-pencil-alt"></i> Edit</a>
-                                    @if (auth()->user()->role == 'admin')
-                                    <a href="/nilaipelajaran/{{$siswa->id}}/delete" class="btn btn-danger btn-sm my-1 mr-sm-1" onclick="return confirm('Hapus Data ?')"><i class="nav-icon fas fa-trash"></i>
-                                        Hapus</a>
-                                    {{-- <a href="/nilaipelajaran/{{$siswa->id}}/show" class="btn btn-success btn-sm my-1 mr-sm-1"><i class="nav-icon fas fa-child"></i> Detail</a> --}}
-                                    @endif
-                                </div>
-                            </center>
+                                    <a href="{{ route('nilaipelajaran.edit', ['nis' => $nis, 'tahun_angkatan' => $student['tahun_angkatan'], 'tahun_pelajaran' => $student['tahun_pelajaran'], 'kelas' => $student['id_kelas']]) }}" class="btn btn-primary btn-sm">Edit</a>
+
+                                    {{-- <a href="/nilaipelajaran/{{$nis}}/delete" class="btn btn-danger btn-sm">Delete</a> --}}
+                                    <a href="{{ route('nilaipelajaran.destroy', ['nis' => $nis, 'tahun_angkatan' => $student['tahun_angkatan'], 'tahun_pelajaran' => $student['tahun_pelajaran'], 'kelas' => $student['id_kelas']]) }}" class="btn btn-danger btn-sm">Delete</a>
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    
                 </div>
             </div>
         </div>

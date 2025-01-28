@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Approve;
 use App\Models;
 use App\Nilai;
 use App\Beasiswa;
@@ -12,6 +13,7 @@ use App\NilaiPelajaran;
 use App\Exports\LaporanbeasiswaExport;
 use App\Exports\LaporansiswaExport;
 use App\Exports\LaporandaftarExport;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -98,34 +100,205 @@ class PesyaratanController extends Controller
         }
     
         // Normalisasi dan hitung nilai preferensi
-        foreach ($siswa as $s) {
-            $totalPreferensi = 0;
-    
-            foreach ($kriteria as $k) {
-                $nilai = Nilai::where('nis', $s->siswa->id)
-                              ->where('id_kriteria', $k->id)
-                              ->value('nilai') ?? 0;
-    
-                if ($k->sifat == 'Benefit') {
-                    $normalizedValue = $maxValues[$k->id] != 0 ? $nilai / $maxValues[$k->id] : 0;
-                } else {
-                    $normalizedValue = $nilai != 0 ? $minValues[$k->id] / $nilai : 0;
-                }
-    
-                $model = Models::where('id_kriteria', $k->id)->first();
-    
-                if ($model && isset($model->bobot)) {
-                    $totalPreferensi += $normalizedValue * $model->bobot;
-                }
-            }
-    
-            $s->nilai_preferensi = $totalPreferensi;
-        }
+      
     
         // Urutkan berdasarkan nilai preferensi
         $siswa = $siswa->sortByDesc('nilai_preferensi')->values();
     
         return view('perhitunganbeasiswa.index', compact(
+            'beasiswa', 'tahunMasukList', 'tahunPelajaranList', 'jenisBeasiswaList',
+            'tahunMasukDipilih', 'tahunPelajaranDipilih', 'jenisBeasiswaDipilih', 'siswa'
+        ));
+    }
+    
+
+
+    public function aproveupdate($id)
+    {
+        $siswas = Nilai::find($id);
+// var_dump($siswas);
+// die;
+        if ($siswas) {
+            // Toggle nilai approve antara 0 dan 1
+            if ($siswas->aprove == 0) {
+                $siswas->aprove = 1;
+                // Update aprove_date hanya saat approve menjadi 1
+                $siswas->aprove_date = Carbon::now();
+                $aprove = new Approve();
+        $aprove->tahun = $siswas->tahun;
+        $aprove->nis = $siswas->nis;
+        $aprove->id_beasiswa = $siswas->id_beasiswa;
+        $aprove->nilai = $siswas->nilai;  // Atur sesuai dengan nilai yang diperlukan
+        $aprove->aprove = 1;  // Atur sesuai dengan nilai yang diperlukan
+        $aprove->aprove_date = Carbon::now();
+        $aprove->aksi = "Approve";  // Menandakan aksi hapus
+        $aprove->save();
+            } else {
+                $siswas->aprove = 0;
+                // Jika aprove sudah 1, tidak update aprove_date
+                $aprove = new Approve();
+        $aprove->tahun = $siswas->tahun;
+        $aprove->nis = $siswas->nis;
+        $aprove->id_beasiswa = $siswas->id_beasiswa;
+        $aprove->nilai = $siswas->nilai;  // Atur sesuai dengan nilai yang diperlukan
+        $aprove->aksi = "Batal Approve"; 
+        $aprove->aprove = 0;  // Atur sesuai dengan nilai yang diperlukan
+        $aprove->aprove_date = Carbon::now(); // Menandakan aksi hapus
+        $aprove->save();
+            }
+            $siswas->save();
+        }
+        // Kembali ke halaman sebelumnya
+        return redirect()->route('approve')->with('sukses', 'sukser Approve');
+    }
+    public function approve(Request $request)
+    {
+        // Cek apakah user adalah admin
+        if (Auth::user()->level == 'admin') {
+            Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
+            return redirect()->to('/');
+        }
+    
+        // Ambil tahun unik dari tabel siswa (tahun masuk)
+        $tahunMasukList = Siswa::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+    
+        // Ambil tahun pelajaran unik dari tabel nilaipelajaran
+        $tahunPelajaranList = NilaiPelajaran::select('tahun_pelajaran')->distinct()->orderBy('tahun_pelajaran', 'desc')->pluck('tahun_pelajaran');
+    
+        // Ambil jenis beasiswa unik dari tabel beasiswa
+        $jenisBeasiswaList = Beasiswa::select('nama_beasiswa')->distinct()->pluck('nama_beasiswa');
+    
+        // Ambil tahun yang dipilih dari request
+        $tahunMasukDipilih = $request->get('tahun_masuk');
+        $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
+        $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
+        $approveStatus = $request->get('aprove');
+    
+        // Filter data siswa berdasarkan input
+        $siswaQuery = Nilai::with(['siswa', 'beasiswa', 'nilaipelajaran'])
+        // ->where(function ($query) {
+        //     $query->where('aksi', '!=', 'Delete')
+        //           ->orWhereNull('aksi'); // Menampilkan yang NULL juga
+        // })
+            ->when($tahunMasukDipilih, function ($query) use ($tahunMasukDipilih) {
+                $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
+                    $query->where('tahun', $tahunMasukDipilih);
+                });
+            })
+            ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
+                $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
+                    $query->where('tahun_pelajaran', $tahunPelajaranDipilih);
+                });
+            }) ->when($approveStatus, function ($query) use ($approveStatus) {
+                $query->where('aprove', $approveStatus);  // Filter berdasarkan status approve
+            })
+            ->when($jenisBeasiswaDipilih, function ($query) use ($jenisBeasiswaDipilih) {
+                $query->whereHas('beasiswa', function ($query) use ($jenisBeasiswaDipilih) {
+                    $query->where('nama_beasiswa', $jenisBeasiswaDipilih);
+                });
+            });
+    
+        $siswa = $siswaQuery->get();
+    
+        // Ambil semua data beasiswa
+        $beasiswa = Beasiswa::all();
+    
+        // === Proses Perhitungan SAW ===
+        $kriteria = Kriteria::with('model')->get();
+        $maxValues = [];
+        $minValues = [];
+    
+        foreach ($kriteria as $k) {
+            if ($k->sifat == 'Benefit') {
+                $maxValues[$k->id] = Nilai::where('id_kriteria', $k->id)->max('nilai');
+            } else {
+                $minValues[$k->id] = Nilai::where('id_kriteria', $k->id)->min('nilai');
+            }
+        }
+    
+        // Normalisasi dan hitung nilai preferensi
+      
+    
+        // Urutkan berdasarkan nilai preferensi
+        $siswa = $siswa->sortByDesc('nilai_preferensi')->values();
+    
+        return view('approve.index', compact(
+            'beasiswa', 'tahunMasukList', 'tahunPelajaranList', 'jenisBeasiswaList',
+            'tahunMasukDipilih', 'tahunPelajaranDipilih', 'jenisBeasiswaDipilih', 'siswa'
+        ));
+    }
+    public function histori(Request $request)
+    {
+        // Cek apakah user adalah admin
+        if (Auth::user()->level == 'admin') {
+            Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
+            return redirect()->to('/');
+        }
+    
+        // Ambil tahun unik dari tabel siswa (tahun masuk)
+        $tahunMasukList = Siswa::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+    
+        // Ambil tahun pelajaran unik dari tabel nilaipelajaran
+        $tahunPelajaranList = NilaiPelajaran::select('tahun_pelajaran')->distinct()->orderBy('tahun_pelajaran', 'desc')->pluck('tahun_pelajaran');
+    
+        // Ambil jenis beasiswa unik dari tabel beasiswa
+        $jenisBeasiswaList = Beasiswa::select('nama_beasiswa')->distinct()->pluck('nama_beasiswa');
+    
+        // Ambil tahun yang dipilih dari request
+        $tahunMasukDipilih = $request->get('tahun_masuk');
+        $tahunPelajaranDipilih = $request->get('tahun_pelajaran');
+        $jenisBeasiswaDipilih = $request->get('jenis_beasiswa');
+        $approveStatus = $request->get('aprove');
+    
+        // Filter data siswa berdasarkan input
+        $siswaQuery = Approve::with(['siswa', 'beasiswa', 'nilaipelajaran'])
+        // ->where(function ($query) {
+        //     $query->where('aksi', '!=', 'Delete')
+        //           ->orWhereNull('aksi'); // Menampilkan yang NULL juga
+        // })
+            ->when($tahunMasukDipilih, function ($query) use ($tahunMasukDipilih) {
+                $query->whereHas('siswa', function ($query) use ($tahunMasukDipilih) {
+                    $query->where('tahun', $tahunMasukDipilih);
+                });
+            })
+            ->when($tahunPelajaranDipilih, function ($query) use ($tahunPelajaranDipilih) {
+                $query->whereHas('nilaipelajaran', function ($query) use ($tahunPelajaranDipilih) {
+                    $query->where('tahun_pelajaran', $tahunPelajaranDipilih);
+                });
+            }) ->when($approveStatus, function ($query) use ($approveStatus) {
+                $query->where('aprove', $approveStatus);  // Filter berdasarkan status approve
+            })
+            ->when($jenisBeasiswaDipilih, function ($query) use ($jenisBeasiswaDipilih) {
+                $query->whereHas('beasiswa', function ($query) use ($jenisBeasiswaDipilih) {
+                    $query->where('nama_beasiswa', $jenisBeasiswaDipilih);
+                });
+            });
+    
+        $siswa = $siswaQuery->get();
+    
+        // Ambil semua data beasiswa
+        $beasiswa = Beasiswa::all();
+    
+        // === Proses Perhitungan SAW ===
+        $kriteria = Kriteria::with('model')->get();
+        $maxValues = [];
+        $minValues = [];
+    
+        foreach ($kriteria as $k) {
+            if ($k->sifat == 'Benefit') {
+                $maxValues[$k->id] = Approve::where('id_kriteria', $k->id)->max('nilai');
+            } else {
+                $minValues[$k->id] = Approve::where('id_kriteria', $k->id)->min('nilai');
+            }
+        }
+    
+        // Normalisasi dan hitung nilai preferensi
+      
+    
+        // Urutkan berdasarkan nilai preferensi
+        $siswa = $siswa->sortByDesc('nilai_preferensi')->values();
+    
+        return view('approve.histori', compact(
             'beasiswa', 'tahunMasukList', 'tahunPelajaranList', 'jenisBeasiswaList',
             'tahunMasukDipilih', 'tahunPelajaranDipilih', 'jenisBeasiswaDipilih', 'siswa'
         ));

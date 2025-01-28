@@ -237,10 +237,11 @@
                             
                             <li class="nav-item">
                                 <a href="/nilaipelajaran/index" class="nav-link text-black">
-                                    <i class="far fas fa-user nav-icon"></i>
-                                    <p>Nilai Ajaran</p>
+                                    <i class="fas fa-book nav-icon"></i> <!-- Ikon Buku -->
+                                    <p>Nilai Pelajaran</p>
                                 </a>
                             </li>
+                            
                             
                             {{-- <li class="nav-item">
                                 <a href="/laporanpendaftaran/index" class="nav-link text-black">
@@ -263,7 +264,7 @@
                                 <a href="/perhitunganbeasiswa/index" class="nav-link">
                                     <i class="nav-icon fas fa-layer-group"></i>
                                     <p>
-                                        Penghitungan Beasiswa
+                                         Beasiswa
                                     </p>
                                 </a>
                             </li>
@@ -277,6 +278,39 @@
                                 <a href="/laporasseluruh/index" class="nav-link text-black">
                                     <i class="far fas fa fa-file nav-icon"></i>
                                     <p>Laporan BKM</p>
+                                </a>
+                            </li>
+                            
+                            {{-- <li class="nav-item">
+                                <a href="/laporanpendaftaran/index" class="nav-link text-black">
+                                    <i class="far fas fa fa-file nav-icon"></i>
+                                    <p>Laporan Pendaftaran</p>
+                                </a>
+                            </li>                         --}}
+                        </ul>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-check-circle"></i>
+                            <p>
+                                Aprove
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview bg-light">
+                            <li class="nav-item">
+                                <a href="/approve/index" class="nav-link">
+                                    <i class="nav-icon fas fa-layer-group"></i>
+                                    <p>
+                                         Beasiswa
+                                    </p>
+                                </a>
+                            </li>
+                           
+                            <li class="nav-item">
+                                <a href="/approve/histori" class="nav-link text-black">
+                                    <i class="far fas fa fa-file nav-icon"></i>
+                                    <p>Histori</p>
                                 </a>
                             </li>
                             

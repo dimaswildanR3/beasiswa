@@ -9,7 +9,7 @@ class Orangtua extends Model
     // use HasFactory;
     
     protected $table = 'orangtua';
-    protected $fillable = ['nis', 'nama', 'angkatan', 'kelas_id', 'jenis_kelamin', 'penghasilan', 'tanggungan'];
+    protected $fillable = ['nis', 'nama', 'angkatan', 'kelas_id', 'jenis_kelamin', 'penghasilan', 'tanggungan','tahun_pelajaran'];
 
     public function siswa()
     {

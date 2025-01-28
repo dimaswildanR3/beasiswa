@@ -113,7 +113,10 @@
                             <tr class="bg-light">
                                 <th>NIS</th>
                                 <th><div style="width:110px;">Nama</div></th>
-                                <th><div style="width:110px;">Tahun</div></th>
+                                <th><div style="width:110px;">Tahun Angkatan</div></th>
+                                <th><div style="width:110px;">Tahun Pelajaran</div></th>
+                                <th><div style="width:110px;">Kelas</div></th>
+                                <th><div style="width:110px;">Jenis Beasiswa</div></th>
                                 <th>Nilai Preferensi</th>
                                 {{-- <th>Total Perhitungan Bobot Beasiswa Yayasan</th>
                                 <th>Total Perhitungan Bobot Beasiswa Orang Tua Asuh</th> --}}
@@ -128,12 +131,12 @@
                                 <td>{{ $siswas->siswa->nis }}</td>
                                 <td>{{ $siswas->siswa->nama }}</td>
                                 <td>{{ $siswas->siswa->tahun }}</td>
+                                <td>{{ $siswas->siswa->tahun_pelajaran}}</td>
+                                <td>{{ $siswas->siswa->Kelas->nama_kelas }}</td>
+                                <td>{{ $siswas->beasiswa->nama_beasiswa }}</td>
     
-                                <td>
-                                    @php
-                                        $bobot_kepala = $siswas->nilai_preferensi;
-                                    @endphp
-                                    {{ $bobot_kepala }}
+                                <td>                           
+                                    {{ $siswas->nilai }}
                                 </td>
                                 {{-- <td>
                                     @php

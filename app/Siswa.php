@@ -16,7 +16,8 @@ class Siswa extends Model
       'alamat', 
       'jenis_kelamin', 
       'tahun', 
-      'kelas'
+      'kelas',
+      'aktif','tahun_pelajaran'
   ];
 
     public function nilai()
@@ -27,6 +28,11 @@ class Siswa extends Model
     {
         return $this->belongsTo(Kelas::class, 'kelas');
     }
-    
+    // Model Siswa.php
+public function nilaiPelajaran()
+{
+    return $this->hasMany(NilaiPelajaran::class, 'nis', 'nis');
+}
+
 
 }
