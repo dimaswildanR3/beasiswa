@@ -197,12 +197,12 @@
                                     <p>Bobot</p>
                                 </a>
                             </li>
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a href="/pesyaratan/index" class="nav-link text-black">
                                         <i class="fas fa-check nav-icon"></i>
                                         <p>Penilaian</p>
                                     </a>
-                                </li>
+                                </li> --}}
                         </ul>
                     </li>
                     <li class="nav-item has-treeview">
