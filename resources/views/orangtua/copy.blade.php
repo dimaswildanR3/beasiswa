@@ -1,4 +1,4 @@
-<!-- resources/views/siswa/copy.blade.php -->
+<!-- resources/views/orangtua/copy.blade.php -->
 
 @extends('layouts.master')
 
@@ -38,8 +38,8 @@
             </button>
         </div>
         @endif
-        <h4><i class="fas fa-copy"></i> Copy Data Siswa</h4>
-        <form action="{{ route('siswa.storeCopy') }}" method="POST">
+        <h4><i class="fas fa-copy"></i> Copy Data Orangtua</h4>
+        <form action="{{ route('orangtua.storeCopy') }}" method="POST">
             @csrf
             <div class="form-row">
                 <!-- Filter Tahun Ajaran (Untuk memilih data yang akan disalin) -->

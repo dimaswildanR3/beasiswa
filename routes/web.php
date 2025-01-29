@@ -42,6 +42,8 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/kelas/{id}/delete', 'KelasController@destroy');
 
     Route::get('/orangtua/index', 'OrangtuaController@index')->name('orangtua.index');
+    Route::get('/orangtua/copy', 'orangtuaController@copyData')->name('orangtua.copy');
+    Route::post('/orangtua/copy', 'orangtuaController@storeCopiedData')->name('orangtua.storeCopy');
     Route::get('/orangtua/create', 'OrangtuaController@create');
     Route::get('/orangtua/{id}/edit', 'OrangtuaController@edit');
     Route::post('/orangtua/store', 'OrangtuaController@store')->name('orangtua.store');

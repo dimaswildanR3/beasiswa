@@ -118,7 +118,8 @@
       <input value="{{old('password_baru')}}" id="password_baru" type="password" name="password_baru" class="form_login" placeholder="Password Baru" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
       <input id="konfirmasi_password_baru" type="password" name="konfirmasi_password_baru" class="form_login" placeholder="Konfirmasi Password" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
       <button type="submit" class="tombol_login" onclick="return confirm('Apakah anda yakin ingin mengganti password ?')">Ganti Password</button>
-      <a href="/login">Login</a>
+      <a href="/logout">Login</a>
+      <a href="/" style="float: right;">Kembali</a>
     </form>
   </div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">

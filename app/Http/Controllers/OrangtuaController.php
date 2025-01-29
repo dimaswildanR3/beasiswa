@@ -284,6 +284,60 @@ class OrangtuaController extends Controller
     
         return redirect()->route('orangtua.index')->with('sukses', 'Data orangtua berhasil diperbarui.');
     }
+
+
+
+    public function copyData()
+    {
+        // Ambil data tahun ajaran dan kelas yang tersedia
+        $tahunAjaran = Orangtua::distinct()->pluck('angkatan'); // Ambil data tahun ajaran unik
+        $kelas = Kelas::all(); // Ambil data kelas
+
+        return view('orangtua.copy', compact('tahunAjaran', 'kelas'));
+    }
+
+
+    public function storeCopiedData(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'tahun' => 'required',
+            'kelas' => 'required',
+            'tahun_baru' => 'required|different:tahun',  // Pastikan tahun_baru tidak sama dengan tahun
+            'kelas_baru' => 'required',
+        ], [
+            'tahun_baru.different' => 'Tahun baru tidak boleh sama dengan tahun yang lama.',  // Pesan error custom
+        ]);
+        
+        
+
+        // Ambil data siswa berdasarkan tahun ajaran dan kelas yang dipilih
+        $siswa = Orangtua::where('angkatan', $request->tahun)
+                      ->where('kelas_id', $request->kelas)
+                      ->get();
+                      if ($siswa->isEmpty()) {
+                        return back()->withErrors(['not_found' => 'Tidak ada data siswa untuk tahun dan kelas yang dipilih.']);
+                    }
+                
+
+        // Loop untuk menyalin data dan mengubah tahun dan kelas
+        foreach ($siswa as $siswaItem) {
+            // Buat salinan data siswa dengan tahun dan kelas baru
+            Orangtua::create([
+                'nis' => $siswaItem->nis,
+                'nama' => $siswaItem->nama,
+                'jenis_kelamin' => $siswaItem->jenis_kelamin,
+                'angkatan' => $request->tahun_baru, // Ganti dengan tahun baru
+                'kelas' => $request->kelas_baru, // Ganti dengan kelas baru
+                'penghasilan' => $siswaItem->penghasilan,
+                'tanggungan' => $siswaItem->tanggungan,
+                'tahun_pelajaran' => $siswaItem->tahun_pelajaran,
+                // Tambahkan field lain jika diperlukan
+            ]);
+        }
+
+        return redirect()->route('orangtua.index')->with('sukses', 'Data berhasil disalin dengan tahun dan kelas baru!');
+    }
     
     
 
