@@ -26,15 +26,29 @@ class SiswaController extends Controller
             $tahunAngkatan = $request->input('tahun_angkatan');
             $tahunpelajaran = $request->input('tahun_pelajaran');
             $kelas = $request->input('kelas');
-            
-            // Query siswa berdasarkan tahun dan kelas
+        
+            // Ambil semua NIS dari tabel siswa berdasarkan tahun angkatan
+            $nisSiswa = DB::table('siswa')
+                ->where('tahun', $tahunAngkatan)
+                ->pluck('id')
+                ->toArray(); // Mengubah hasil query menjadi array
+        
+            // Ambil NIS dari tabel orangtua yang ada dalam daftar NIS siswa dan memiliki tahun yang sama
+            $nisDikecualikan = DB::table('orangtua')
+                ->whereIn('nis', $nisSiswa)
+                ->where('angkatan', $tahunAngkatan)
+                ->pluck('nis')
+                ->toArray(); // Mengubah hasil query menjadi array
+        
+            // Query siswa berdasarkan tahun, kelas, dan tidak termasuk NIS yang ada di tabel orangtua
             $siswa = DB::table('siswa')
                 ->where('tahun', $tahunAngkatan)
                 ->where('tahun_pelajaran', $tahunpelajaran)
                 ->where('kelas', $kelas)
                 ->where('aktif', 'Y')
+                ->whereNotIn('id', $nisDikecualikan) // Mengecualikan siswa yang sudah ada di tabel orangtua
                 ->get();
-            
+        
             // Jika tidak ada data siswa ditemukan
             if ($siswa->isEmpty()) {
                 return response()->json(['error' => 'Data siswa tidak ditemukan'], 404);
@@ -43,6 +57,7 @@ class SiswaController extends Controller
             // Mengembalikan hasil dalam bentuk JSON
             return response()->json($siswa);
         }
+        
         public function getKelas(Request $request)
 {
     

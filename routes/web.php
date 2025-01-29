@@ -69,6 +69,7 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/laporansiswa/export_excel', 'PesyaratanController@export_excel');
     Route::get('/laporasseluruh/export_excel', 'PesyaratanController@export_excelll');
     Route::get('/perhitunganbeasiswa/index', 'PesyaratanController@indeex')->name('perhitunganbeasiswa');
+    Route::get('/perhitunganbeasiswa/indexall', 'PesyaratanController@indeexall')->name('perhitunganbeasiswaall');
     Route::get('/approve/index', 'PesyaratanController@approve')->name('approve');
     Route::get('/approve/histori', 'PesyaratanController@histori')->name('histori');
     Route::put('/approved/{id}/aproved', 'PesyaratanController@aproveupdate')->name('approve.update');

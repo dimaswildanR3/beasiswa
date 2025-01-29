@@ -280,6 +280,12 @@
                                     <p>Laporan BKM</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="/perhitunganbeasiswa/indexall" class="nav-link text-black">
+                                    <i class="far fas fa fa-file nav-icon"></i>
+                                    <p>Laporan BPKM</p>
+                                </a>
+                            </li>
                             
                             {{-- <li class="nav-item">
                                 <a href="/laporanpendaftaran/index" class="nav-link text-black">
