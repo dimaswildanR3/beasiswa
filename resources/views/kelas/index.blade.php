@@ -42,10 +42,25 @@
             </div>
         </div>
         <div>
+            @php
+    $allowedRoles = [
+        'admin',
+        'user_management',
+        'tata_usaha',
+        'wali_kelas',
+      
+        'kepala_sekolah',
+       
+    ];
+@endphp
+
+@if (in_array(auth()->user()->role, $allowedRoles))
+
             <div class="col">
                 <a class="btn btn-primary btn-sm my-1 mr-sm-1" href="create" role="button"><i class="fas fa-plus"></i> Tambah Data</a>
                 <br>
             </div>
+            @endif
         </div>
         <div class="row">
             <div class="row table-responsive">
@@ -58,7 +73,21 @@
                                 <th><div style="width:110px;">kelas</div></th>
                                 {{-- <th><div style="width:110px;">alamat</div></th>
                                 <th><div style="width:110px;">Jenis Kelamin</div></th> --}}
+                                @php
+                                $allowedRoles = [
+                                    'admin',
+                                    'user_management',
+                                    'tata_usaha',
+                                    'wali_kelas',
+                                  
+                                    'kepala_sekolah',
+                                   
+                                ];
+                            @endphp
+                            
+                            @if (in_array(auth()->user()->role, $allowedRoles))
                                 <th><center> Aksi</center></th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -71,6 +100,19 @@
                                 <td>{{$kela->nama_kelas}}</td>
                                 {{-- <td>{{$kelas->alamat}}</td>
                                 <td>{{$kelas->jenis_kelamin}}</td> --}}
+                                @php
+                                $allowedRoles = [
+                                    'admin',
+                                    'user_management',
+                                    'tata_usaha',
+                                    'wali_kelas',
+                                  
+                                    'kepala_sekolah',
+                                   
+                                ];
+                            @endphp
+                            
+                            @if (in_array(auth()->user()->role, $allowedRoles))
                                 <td>
                                     <center>
                                     <div class="ok"style="width:220px;">
@@ -84,6 +126,7 @@
                                 </div>
                             </center>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>

@@ -127,7 +127,7 @@
 
         <form action="postlogin" method="POST">
             @csrf
-            <input type="email" name="email" class="form_login" placeholder="email" required email oninvalid="this.setCustomValidity('Pastikan anda sudah mengisikan email dengan benar !')" oninput="setCustomValidity('')">
+            <input type="text" name="email" class="form_login" placeholder="username" required oninvalid="this.setCustomValidity('Pastikan anda sudah mengisikan email dengan benar !')" oninput="setCustomValidity('')">
             <input id="password" type="password" name="password" class="form_login" placeholder="password" required oninvalid="this.setCustomValidity('Harap masukkan password !')" oninput="setCustomValidity('')">
             <button type="submit" class="tombol_login">Login</button>
         </form>

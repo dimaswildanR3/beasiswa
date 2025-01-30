@@ -6,8 +6,8 @@
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+Route::group(['middleware' => ['auth', 'checkRole:user_management,tata_usaha,wali_kelas,guru_bahasa_arab,guru_alquran_hadist,guru_fiqih_aqidah,kepala_sekolah,admin']], function () {
+Route::group(['middleware' => ['auth', 'checkRole:user_management,tata_usaha,wali_kelas,guru_bahasa_arab,guru_alquran_hadist,guru_fiqih_aqidah,kepala_sekolah,admin']], function () {
 |
 */
 
@@ -17,7 +17,7 @@ Route::post('/postlogin', 'AuthController@postlogin');
 Route::get('/logout', 'AuthController@logout');
 
 //Route untuk user Admin
-Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
+Route::group(['middleware' => ['auth', 'checkRole:user_management,tata_usaha,wali_kelas,guru_bahasa_arab,guru_alquran_hadist,guru_fiqih_aqidah,kepala_sekolah,admin']], function () {
     Route::get('/siswa/index', 'SiswaController@index')->name('siswa');
     Route::get('/siswa/indexnon', 'SiswaController@indexnon')->name('siswanon');
     Route::get('/siswa/copy', 'SiswaController@copyData')->name('siswa.copy');
@@ -194,7 +194,7 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
 });
 
 //Route untuk user Petugas Administrasi Keuangan dan Admin
-Route::group(['middleware' => ['auth', 'checkRole:admin,PetugasAdministrasiKeuangan']], function () {
+Route::group(['middleware' => ['auth', 'checkRole:user_management,tata_usaha,wali_kelas,guru_bahasa_arab,guru_alquran_hadist,guru_fiqih_aqidah,kepala_sekolah,admin']], function () {
 
     Route::get('/nilaipelajaran/index', 'NilaiPelajaranController@index')->name('nilaipelajaran.index');
 Route::get('/nilaipelajaran/create', 'NilaiPelajaranController@create')->name('nilaipelajaran.create');
@@ -277,7 +277,7 @@ Route::get('/nilaipelajaran/{filter}/print', 'NilaiPelajaranController@print')->
 });
 
 //Route untuk user Petugas Administrasi Surat dan Admin
-Route::group(['middleware' => ['auth', 'checkRole:admin,PetugasAdministrasiSurat']], function () {
+Route::group(['middleware' => ['auth', 'checkRole:user_management,tata_usaha,wali_kelas,guru_bahasa_arab,guru_alquran_hadist,guru_fiqih_aqidah,kepala_sekolah,admin']], function () {
 
     Route::get('/suratmasuk', 'SuratMasukController@index');
     Route::get('/suratmasuk/index', 'SuratMasukController@index');
@@ -329,7 +329,7 @@ Route::group(['middleware' => ['auth', 'checkRole:admin,PetugasAdministrasiSurat
 });
 
 //Route untuk user siswa
-Route::group(['middleware' => ['auth', 'checkRole:Siswa']], function () {
+Route::group(['middleware' => ['auth', 'checkRole:user_management,tata_usaha,wali_kelas,guru_bahasa_arab,guru_alquran_hadist,guru_fiqih_aqidah,kepala_sekolah,admin']], function () {
     Route::get('/{id}/siswadashboard', 'DashboardController@siswadashboard');
     Route::get('/tabungan/setor/{id}/siswaindex', 'SetorController@siswaindex');
     Route::get('/tabungan/tarik/{id}/siswaindex', 'TarikController@siswaindex');
@@ -337,7 +337,7 @@ Route::group(['middleware' => ['auth', 'checkRole:Siswa']], function () {
 });
 
 //Route untuk user Admin, Petugas Administrasi Surat dan Petugas Administrasi Keuangan
-Route::group(['middleware' => ['auth', 'checkRole:admin,PetugasAdministrasiKeuangan,PetugasAdministrasiSurat']], function () {
+Route::group(['middleware' => ['auth', 'checkRole:user_management,tata_usaha,wali_kelas,guru_bahasa_arab,guru_alquran_hadist,guru_fiqih_aqidah,kepala_sekolah,admin']], function () {
     Route::get('/', function () {
         return view('/dashboard');
     });
@@ -350,7 +350,7 @@ Route::group(['middleware' => ['auth', 'checkRole:admin,PetugasAdministrasiKeuan
 });
 
 //Route untuk user Admin, Petugas Administrasi Surat, Petugas Administrasi Keuangan dan Siswa
-Route::group(['middleware' => ['auth', 'checkRole:admin,PetugasAdministrasiKeuangan,PetugasAdministrasiSurat,Siswa']], function () {
+Route::group(['middleware' => ['auth', 'checkRole:user_management,tata_usaha,wali_kelas,guru_bahasa_arab,guru_alquran_hadist,guru_fiqih_aqidah,kepala_sekolah,admin']], function () {
     Route::get('/auths/{id}/gantipassword', 'AuthController@gantipassword');
     Route::post('/auths/{id}/simpanpassword', 'AuthController@simpanpassword');
 });

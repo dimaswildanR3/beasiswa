@@ -52,12 +52,26 @@
       {{-- Add Data and Copy Data Button --}}
       <div class="mb-3">
         <div class="d-flex">
+            @php
+            $allowedRoles = [
+                'admin',
+                'user_management',
+                'tata_usaha',
+                'wali_kelas',
+              
+                'kepala_sekolah',
+               
+            ];
+        @endphp
+        
+        @if (in_array(auth()->user()->role, $allowedRoles))
             <a class="btn btn-primary btn-sm mr-2" href="create" role="button">
                 <i class="fas fa-plus"></i> Tambah Data
             </a>
             <a class="btn btn-secondary btn-sm" href="copy" role="button">
                 <i class="fas fa-copy"></i> Copy Data
             </a>
+            @endif
             <!-- Tombol Siswa Tidak Aktif yang dipindahkan ke kanan dengan warna berbeda -->
             <a class="btn btn-danger btn-sm ml-auto" href="{{ route('siswanon') }}" role="button">
                 <i class="fas fa-user-slash"></i> Siswa Tidak Aktif
@@ -131,7 +145,21 @@
                                 <th><div style="width: 110px;">Tahun Angkatan</div></th>
                                 <th><div style="width: 110px;">Tahun Pelajaran</div></th>
                                 <th><div style="width: 110px;">Kelas</div></th>
+                                @php
+                                $allowedRoles = [
+                                    'admin',
+                                    'user_management',
+                                    'tata_usaha',
+                                    'wali_kelas',
+                                  
+                                    'kepala_sekolah',
+                                   
+                                ];
+                            @endphp
+                            
+                            @if (in_array(auth()->user()->role, $allowedRoles))
                                 <th><center>Aksi</center></th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -150,6 +178,19 @@
                                 
 
                                 <td>{{ $siswa->Kelas->nama_kelas ?? 'kelas belum di isi' }}</td>
+                                @php
+                                $allowedRoles = [
+                                    'admin',
+                                    'user_management',
+                                    'tata_usaha',
+                                    'wali_kelas',
+                                  
+                                    'kepala_sekolah',
+                                   
+                                ];
+                            @endphp
+                            
+                            @if (in_array(auth()->user()->role, $allowedRoles))
                                 <td class="text-center">
                                     <div class="btn-group">
                                         <a href="/siswa/{{$siswa->id}}/edit" class="btn btn-primary btn-sm">
@@ -162,6 +203,7 @@
                                         @endif
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>

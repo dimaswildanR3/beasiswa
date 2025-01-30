@@ -68,8 +68,6 @@
                         @endforeach
                     </select>
 
-              
-
                     <button type="button" id="tampilkan-siswa" class="btn btn-primary mt-3">Tampilkan Siswa</button>
                 </div>
             </div>
@@ -86,9 +84,21 @@
                         <th>Tahun Pelajaran</th>
                         <th>Kelas</th>
                         
-                        @foreach($kriteria as $k)
+                        @php
+                        $userRole = Auth::user()->role; // Ambil role user yang login
+                    @endphp
+                    
+                    @foreach($kriteria as $k)
+                        @if(
+                            ($userRole == 'guru_bahasa_arab' && $k->id == 1) ||
+                            ($userRole == 'gurualquranhadist' && $k->id == 2) ||
+                            ($userRole == 'gurufiqihaqidah' && $k->id == 3) ||
+                            (!in_array($userRole, ['guru_bahasa_arab', 'gurualquranhadist', 'gurufiqihaqidah']))
+                        )
                             <th>{{ $k->nama }}</th>
-                        @endforeach
+                        @endif
+                    @endforeach
+                    
                     </tr>
                 </thead>
                 <tbody id="siswa-list">
@@ -108,7 +118,6 @@
         var tahun = document.getElementById('tahun').value;
         var kelas = document.getElementById('kelas').value;
         var tahunpelajaran = document.getElementById('tahun_pelajaran').value;
-        // var semester  = document.getElementById('semester').value;
 
         // Reset daftar siswa sebelum menampilkan data baru
         var siswaList = document.getElementById('siswa-list');
@@ -125,6 +134,8 @@
                         alert(data.error);  // Menampilkan error dari API jika data tidak ditemukan
                     } else {
                         data.forEach(siswa => {
+                            var role = '{{ auth()->user()->role }}';  // Mengetahui peran pengguna
+
                             // Fetch data kelas berdasarkan id
                             fetch(`/api/getkelas?id=${siswa.kelas}`)
                                 .then(response => response.json())
@@ -138,21 +149,35 @@
                                             <td>Beasiswa Prestasi (BP)</td>
                                             <td>${siswa.tahun}</td>
                                             <td>${siswa.tahun_pelajaran}</td>
-                                            <td>${namaKelas}</td> <!-- Menampilkan nama kelas -->
-                                           
-                                            <!-- Menambahkan NIS dan Nama Siswa sebagai input tersembunyi -->
+                                            <td>${namaKelas}</td>
+
                                             <input type="hidden" name="orangtua[${siswa.id}][id]" value="${siswa.id}">
                                             <input type="hidden" name="orangtua[${siswa.id}][beasiswa]" value="1">
-
                                             <input type="hidden" name="orangtua[${siswa.id}][tahun]" value="${siswa.tahun}">
                                             <input type="hidden" name="orangtua[${siswa.id}][kelas]" value="${siswa.kelas_id}">
                                             <input type="hidden" name="orangtua[${siswa.id}][tahun_pelajaran]" value="${siswa.tahun_pelajaran}">
-                                            
-                                            @foreach($kriteria as $k)
-                                                <td>
-                                                    <input type="number" name="nilai[${siswa.id}][{{ $k->id }}]" class="form-control" placeholder="Masukkan Nilai" required max="100">
-                                                </td>
-                                            @endforeach
+
+                                            <!-- Menampilkan kolom nilai berdasarkan role -->
+                                          @foreach($kriteria as $k)
+    @if (auth()->user()->role === 'guru_bahasa_arab' && $k->id == 1)
+        <td>
+            <input type="number" name="nilai[${siswa.id}][{{ $k->id }}]" class="form-control" placeholder="Masukkan Nilai" required max="100">
+        </td>
+    @elseif (auth()->user()->role === 'guru_alquran_hadist' && $k->id == 2)
+        <td>
+            <input type="number" name="nilai[${siswa.id}][{{ $k->id }}]" class="form-control" placeholder="Masukkan Nilai" required max="100">
+        </td>
+    @elseif (auth()->user()->role === 'guru_fiqih_aqidah' && $k->id == 3)
+        <td>
+            <input type="number" name="nilai[${siswa.id}][{{ $k->id }}]" class="form-control" placeholder="Masukkan Nilai" required max="100">
+        </td>
+    @else
+        <td>
+            <input type="hidden" name="nilai[${siswa.id}][{{ $k->id }}]" value="0">
+        </td>
+    @endif
+@endforeach
+
                                         </tr>
                                     `;
                                 })
@@ -196,6 +221,4 @@
 });
 
 </script>
-
-
 @endsection

@@ -52,7 +52,7 @@
                         <tr class="bg-light">
                             <th>No.</th>
                             <th>Nama</th>
-                            <th>Email</th>
+                            <th>Username</th>
                             <th>Level</th>
                             <th>Aksi</th>
                         </tr>
@@ -65,7 +65,7 @@
                             <td>{{$no}}</td>
                             <td>{{$pengguna->name}}</td>
                             <td>{{$pengguna->email}}</td>
-                            <td>{{$pengguna->role}}</td>
+                            <td>{{ ucwords(str_replace('_', ' ', $pengguna->role)) }}</td>
                             <td>
                                 <form action="{{ route('pengguna.destroy', $pengguna->id) }}" method="post">
                                     @csrf

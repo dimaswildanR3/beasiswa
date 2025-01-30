@@ -11,7 +11,7 @@
             </div>
         </div>
         {{-- Filter Form --}}
-        <form action="{{ route('orangtua.index') }}" method="GET">
+        <form action="{{ route('orangtua.index') }}" method="GET">z
             <div class="row mb-3">
                 <div class="col">
                     <select name="tahun_angkatan" class="form-control" onchange="this.form.submit()">
@@ -39,7 +39,19 @@
                 </div>
             </div>
         </form>
-        
+        @php
+        $allowedRoles = [
+            'admin',
+            'user_management',
+            'tata_usaha',
+            'wali_kelas',
+          
+            'kepala_sekolah',
+           
+        ];
+    @endphp
+    
+    @if (in_array(auth()->user()->role, $allowedRoles))
           {{-- Add Data and Copy Data Button --}}
           <div class="mb-3">
             <div class="d-flex">
@@ -51,6 +63,7 @@
                 </a>
             </div>
         </div>
+        @endif
         {{-- Data Table --}}
         <div class="row">
             <div class="col">
@@ -67,7 +80,21 @@
                                 <th><div style="width: 110px;">Jenis Kelamin</div></th>
                                 <th><div style="width: 110px;">Penghasilan</div></th>
                                 <th><div style="width: 110px;">Tanggungan</div></th>
+                                @php
+                                $allowedRoles = [
+                                    'admin',
+                                    'user_management',
+                                    'tata_usaha',
+                                    'wali_kelas',
+                                  
+                                    'kepala_sekolah',
+                                   
+                                ];
+                            @endphp
+                            
+                            @if (in_array(auth()->user()->role, $allowedRoles))
                                 <th><center>Aksi</center></th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -82,6 +109,19 @@
                                 <td>{{ $orangtuas->jenis_kelamin }}</td>
                                 <td>{{ $orangtuas->penghasilan }}</td>
                                 <td>{{ $orangtuas->tanggungan }}</td>
+                                @php
+                                $allowedRoles = [
+                                    'admin',
+                                    'user_management',
+                                    'tata_usaha',
+                                    'wali_kelas',
+                                  
+                                    'kepala_sekolah',
+                                   
+                                ];
+                            @endphp
+                            
+                            @if (in_array(auth()->user()->role, $allowedRoles))
                                 <td class="text-center">
                                     <div class="btn-group">
                                         <a href="/orangtua/{{$orangtuas->id}}/edit" class="btn btn-primary btn-sm">
@@ -94,6 +134,7 @@
                                         @endif
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>

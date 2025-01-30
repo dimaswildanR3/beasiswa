@@ -135,7 +135,9 @@
                             <th><div style="width:110px;">Kelas</div></th>
                             <th><div style="width:110px;">Jenis Beasiswa</div></th>
                             <th>Nilai Preferensi</th>
+                            @if (auth()->user()->role == 'kepala_sekolah')
                             <th>aksi</th>
+                            @endif
                             {{-- <th>Total Perhitungan Bobot Beasiswa Yayasan</th>
                             <th>Total Perhitungan Bobot Beasiswa Orang Tua Asuh</th> --}}
                         </tr>
@@ -159,6 +161,7 @@
                                 var_dump($siswas->aprove);
                             @endphp --}}
                             </td>
+                            @if (auth()->user()->role == 'kepala_sekolah')
                             <td>
                                 @if($siswas->aprove == 0)
                                 <form action="{{ route('approve.update', $siswas->id) }}" method="POST">
@@ -174,7 +177,7 @@
                                 </form>
                                 @endif
                             </td>
-                            
+                            @endif
                             {{-- <td>
                                 @php
                                     $bobot_yayasan = $siswas->nilai / (DB::table('penilaian')->where('id_kriteria', "14")->count() ?: 1) * DB::table('model')->where('id', "58")->value('bobot');

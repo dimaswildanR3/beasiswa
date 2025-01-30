@@ -127,7 +127,23 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-light-primary elevation-4">
             <!-- Brand Logo -->
-            @if (auth()->user()->role == 'admin' )
+            @php
+            $allowedRoles = [
+                'admin',
+                'user_management',
+                'tata_usaha',
+                'wali_kelas',
+                'guru_bahasa_arab',
+                'guru_alquran_hadist',
+                'guru_fiqih_aqidah',
+                'kepala_sekolah',
+                
+            ];
+        @endphp
+        
+        @if (in_array(auth()->user()->role, $allowedRoles))
+       
+        
             <a href="#" class="brand-link bg-info">
                 <center>
                 {{-- "<img src="/logo.png" alt="Logo" class="brand-image" style="opacity: .;"> --}}
@@ -144,7 +160,22 @@
             @endif
             <!-- Sidebar -->
             <div class="sidebar">
-                @if (auth()->user()->role == 'admin')
+                @php
+                $allowedRoles = [
+                    'admin',
+                    'user_management',
+                    'tata_usaha',
+                    'wali_kelas',
+                    'guru_bahasa_arab',
+                    'guru_alquran_hadist',
+                    'guru_fiqih_aqidah',
+                    'kepala_sekolah',
+                    
+                ];
+            @endphp
+            
+            @if (in_array(auth()->user()->role, $allowedRoles))
+           
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <!-- Sidebar Menu -->
                     <a>
@@ -161,7 +192,19 @@
                             </p>
                         </a>
                     </li>
-                   
+                    @php
+                    $allowedRoles = [
+                        'admin',
+                        
+                        'tata_usaha',
+                     
+                        'kepala_sekolah',
+                       
+                    ];
+                @endphp
+                
+                @if (in_array(auth()->user()->role, $allowedRoles))
+               
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-sharp fa-light fa-pen"></i>
@@ -205,6 +248,22 @@
                                 </li> --}}
                         </ul>
                     </li>
+                    @endif   @php
+                    $allowedRoles = [
+                        'admin',
+                    
+                        'tata_usaha',
+                        'wali_kelas',
+                        'guru_bahasa_arab',
+                        'guru_alquran_hadist',
+                        'guru_fiqih_aqidah',
+                        'kepala_sekolah',
+                       
+                    ];
+                @endphp
+                
+                @if (in_array(auth()->user()->role, $allowedRoles))
+               
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="far fas fa-user nav-icon"></i>
@@ -251,6 +310,20 @@
                             </li>                         --}}
                         </ul>
                     </li>
+                    @endif
+                    @php
+                    $allowedRoles = [
+                        'admin',
+                     
+                        'tata_usaha',
+                       
+                        'kepala_sekolah',
+                        
+                    ];
+                @endphp
+                
+                @if (in_array(auth()->user()->role, $allowedRoles))
+               
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-sharp fa-light fa fa-file"></i>
@@ -295,6 +368,20 @@
                             </li>                         --}}
                         </ul>
                     </li>
+                    @endif
+                    @php
+                    $allowedRoles = [
+                        'admin',
+                       
+                        'tata_usaha',
+                       
+                        'kepala_sekolah',
+                        
+                    ];
+                @endphp
+                
+                @if (in_array(auth()->user()->role, $allowedRoles))
+               
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-check-circle"></i>
@@ -328,6 +415,7 @@
                             </li>                         --}}
                         </ul>
                     </li>
+                    @endif
                     {{-- <li class="nav-item">
                         <a href="/klasifikasi/index" class="nav-link">
                             <i class="nav-icon fas 	fa fa-file"></i>
@@ -339,7 +427,7 @@
                    
                 </ul>
                 @endif            
-                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'PetugasAdministrasiSurat' || auth()->user()->role == 'PetugasAdministrasiKeuangan')
+                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'user_management' || auth()->user()->role == 'PetugasAdministrasiKeuangan')
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <!-- Sidebar Menu -->
                     <a class="text-black">
@@ -350,7 +438,7 @@
                     <!-- Add icons to the links using the .nav-icon class
                         with font-awesome or any other icon font library -->
                     
-                    @if (auth()->user()->role == 'admin')
+                    @if (auth()->user()->role == 'admin'|| auth()->user()->role == 'user_management')
                     <li class="nav-item">
                         <a href="{{ route('pengguna.index') }}" class="nav-link">
                             <i class="fas fa-user-cog nav-icon"></i>

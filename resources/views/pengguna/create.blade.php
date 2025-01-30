@@ -24,8 +24,8 @@
                 <div class="col-md-6">
                     <label for="name">Nama</label>
                     <input name="name" type="text" class="form-control bg-light" id="name" placeholder="Nama" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
-                    <label for="email">Email</label>
-                    <input name="email" type="email" class="form-control bg-light" id="email" placeholder="Email" required oninvalid="this.setCustomValidity('Pastikan anda sudah mengisikan email dengan format yang benar !')" oninput="setCustomValidity('')">
+                    <label for="email">Username</label>
+                    <input name="email" type="text" class="form-control bg-light" id="email" placeholder="username" required oninvalid="this.setCustomValidity('Pastikan anda sudah mengisikan email dengan format yang benar !')" oninput="setCustomValidity('')">
                 </div>
                 <div class="col-md-6">
                     <label for="password">Password</label>
@@ -33,7 +33,14 @@
                     <label for="role">Level</label>
                     <select name="role" id="role" class="form-control bg-light" required oninvalid="this.setCustomValidity('Isian ini tidak boleh kosong !')" oninput="setCustomValidity('')">
                         <option value="admin">Administrator</option>
-                        <option value="user">User</option>
+                        <option value="user_management">User Management</option>
+                        <option value="tata_usaha">Tata Usaha</option>
+                        <option value="wali_kelas">Wali Kelas</option>
+                        <option value="guru_bahasa_arab">Guru Bahasa Arab</option>
+                        <option value="guru_alquran_hadist">Guru Alquran & Hadist</option>
+                        <option value="guru_fiqih_aqidah">Guru Fiqih & Aqidah Akhlak</option>
+                        <option value="kepala_sekolah">Kepala Sekolah</option>
+                        {{-- <option value="user">User</option> --}}
                     </select>
                 </div>
             </div>

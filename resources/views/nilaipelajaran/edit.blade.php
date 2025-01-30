@@ -52,9 +52,21 @@
                         <th>Tahun Angkatan</th>
                         <th>Tahun Pelajaran</th>
                         <th>Kelas</th>
-                        @foreach($kriteria as $k)
+                        @php
+                        $userRole = Auth::user()->role; // Ambil role user yang login
+                    @endphp
+                    
+                    @foreach($kriteria as $k)
+                        @if(
+                            ($userRole == 'guru_bahasa_arab' && $k->id == 1) ||
+                            ($userRole == 'gurualquranhadist' && $k->id == 2) ||
+                            ($userRole == 'gurufiqihaqidah' && $k->id == 3) ||
+                            (!in_array($userRole, ['guru_bahasa_arab', 'gurualquranhadist', 'gurufiqihaqidah']))
+                        )
                             <th>{{ $k->nama }}</th>
-                        @endforeach
+                        @endif
+                    @endforeach
+                    
                     </tr>
                 </thead>
                 <tbody id="siswa-list">
@@ -71,49 +83,55 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Ambil parameter dari URL
     const urlParams = new URLSearchParams(window.location.search);
     var tahun = urlParams.get('tahun_angkatan'); 
     var kelas = urlParams.get('kelas');
     var tahunpelajaran = urlParams.get('tahun_pelajaran');
     var nis = window.location.pathname.split('/')[2];
 
-    // Reset daftar siswa sebelum menampilkan data baru
     var siswaList = document.getElementById('siswa-list');
-    siswaList.innerHTML = '';  // Bersihkan daftar siswa sebelumnya
+    siswaList.innerHTML = ''; 
 
-    // Reset tombol simpan
     document.getElementById('saveButton').disabled = true;
+
+    var userRole = "{{ auth()->user()->role }}"; // Ambil role user yang sedang login
 
     if (tahun && kelas) {
         fetch(`/api/getsiswaid?tahun=${tahun}&kelas=${kelas}&tahun_pelajaran=${tahunpelajaran}&nis=${nis}`)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                alert(data.error);  // Menampilkan error dari API jika data tidak ditemukan
+                alert(data.error);
             } else {
                 data.forEach(siswa => {
-                    var nilaiHTML = ''; // Initialize empty string for nilai HTML
+                    var nilaiHTML = ''; 
 
-                    // Menampilkan data siswa beserta nilai berdasarkan kriteria
                     @foreach($kriteria as $k)
-                        // Memeriksa apakah nilai tersedia berdasarkan id_kriteria
                         var nilai = siswa.nilai[{{ $k->id }}] ? siswa.nilai[{{ $k->id }}][0].nilai : '';
+                        
+                        var displayStyle = '';
+                        if (userRole === 'guru_bahasa_arab' && {{ $k->id }} !== 1) {
+                            displayStyle = 'display: none;';
+                        } else if (userRole === 'gurualquranhadist' && {{ $k->id }} !== 2) {
+                            displayStyle = 'display: none;';
+                        } else if (userRole === 'gurufiqihaqidah' && {{ $k->id }} !== 3) {
+                            displayStyle = 'display: none;';
+                        }
+
                         nilaiHTML += ` 
-                            <td>
+                            <td style="${displayStyle}">
                                 <input type="number" name="nilai[${siswa.id}][{{ $k->id }}]" class="form-control" placeholder="Masukkan Nilai" required max="100" 
                                 value="${nilai}">
                             </td>
+                            <input type="hidden" name="nilai_hidden[${siswa.id}][{{ $k->id }}]" value="${nilai}">
                         `;
                     @endforeach
 
-                    // Fetch class data for each student
                     fetch(`/api/getkelas?id=${siswa.kelas}`)
                     .then(response => response.json())
                     .then(kelasData => {
                         var namaKelas = kelasData ? kelasData.nama_kelas : 'Kelas tidak ditemukan';
 
-                        // Menambahkan baris siswa ke dalam tabel
                         siswaList.innerHTML += `
                             <tr>
                                 <td>${siswa.nis}</td>
@@ -122,21 +140,18 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <td>${siswa.tahun}</td>
                                 <td>${siswa.tahun_pelajaran}</td>
                                 <td>${namaKelas}</td> 
-                                <!-- Menambahkan NIS dan Nama Siswa sebagai input tersembunyi -->
                                 <input type="hidden" name="orangtua[${siswa.id}][id]" value="${siswa.id}">
                                 <input type="hidden" name="orangtua[${siswa.id}][beasiswa]" value="1">
                                 <input type="hidden" name="orangtua[${siswa.id}][tahun]" value="${siswa.tahun}">
                                 <input type="hidden" name="orangtua[${siswa.id}][kelas]" value="${siswa.kelas}">
                                 <input type="hidden" name="orangtua[${siswa.id}][tahun_pelajaran]" value="${siswa.tahun_pelajaran}">
-                                ${nilaiHTML} <!-- Menyisipkan nilai berdasarkan kriteria -->
+                                ${nilaiHTML} 
                             </tr>
                         `;
                     })
                     .catch(error => console.error('Error fetching kelas:', error));
-
                 });
 
-                // Mengaktifkan tombol simpan setelah siswa ditampilkan
                 document.getElementById('saveButton').disabled = false;
             }
         })

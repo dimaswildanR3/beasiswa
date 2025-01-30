@@ -12,7 +12,22 @@
 <div class="row">
   <div class="container-fluid">
     <!-- Info boxes -->
-    @if (auth()->user()->role == 'admin' || auth()->user()->role == 'PetugasAdministrasiSurat')
+    @php
+    $allowedRoles = [
+        'admin',
+        'user_management',
+        'tata_usaha',
+        'wali_kelas',
+        'guru_bahasa_arab',
+        'guru_alquran_hadist',
+        'guru_fiqih_aqidah',
+        'kepala_sekolah',
+        'cang' // Menambahkan "cang" yang belum ada
+    ];
+@endphp
+
+@if (in_array(auth()->user()->role, $allowedRoles))
+
     <div class="row">
       <div class="flex-fill col-md-3" style="padding: 4px 4px 4px 4px">
         <div class="info-box md-3">

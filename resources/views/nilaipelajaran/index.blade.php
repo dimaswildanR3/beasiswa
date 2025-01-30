@@ -129,8 +129,21 @@
                                 <td>
                                     <a href="{{ route('nilaipelajaran.edit', ['nis' => $nis, 'tahun_angkatan' => $student['tahun_angkatan'], 'tahun_pelajaran' => $student['tahun_pelajaran'], 'kelas' => $student['id_kelas']]) }}" class="btn btn-primary btn-sm">Edit</a>
 
+                                    @php
+                                    $allowedRoles = [
+                                        'admin',
+                                      
+                                        'wali_kelas',
+                                      
+                                        'kepala_sekolah',
+                                       
+                                    ];
+                                @endphp
+                                
+                                @if (in_array(auth()->user()->role, $allowedRoles))
                                     {{-- <a href="/nilaipelajaran/{{$nis}}/delete" class="btn btn-danger btn-sm">Delete</a> --}}
                                     <a href="{{ route('nilaipelajaran.destroy', ['nis' => $nis, 'tahun_angkatan' => $student['tahun_angkatan'], 'tahun_pelajaran' => $student['tahun_pelajaran'], 'kelas' => $student['id_kelas']]) }}" class="btn btn-danger btn-sm">Delete</a>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach

@@ -125,7 +125,21 @@
                                 <th><div style="width: 110px;">Tahun Angkatan</div></th>
                                 <th><div style="width: 110px;">Tahun Pelajaran</div></th>
                                 <th><div style="width: 110px;">Kelas</div></th>
+                                @php
+                                $allowedRoles = [
+                                    'admin',
+                                    'user_management',
+                                    'tata_usaha',
+                                    'wali_kelas',
+                                  
+                                    'kepala_sekolah',
+                                   
+                                ];
+                            @endphp
+                            
+                            @if (in_array(auth()->user()->role, $allowedRoles))
                                 <th><center>Aksi</center></th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -144,6 +158,19 @@
                                 
 
                                 <td>{{ $siswa->Kelas->nama_kelas ?? 'kelas belum di isi' }}</td>
+                                @php
+                                $allowedRoles = [
+                                    'admin',
+                                    'user_management',
+                                    'tata_usaha',
+                                    'wali_kelas',
+                                  
+                                    'kepala_sekolah',
+                                   
+                                ];
+                            @endphp
+                            
+                            @if (in_array(auth()->user()->role, $allowedRoles))
                                 <td class="text-center">
                                     <div class="btn-group">
                                         <a href="/siswa/{{$siswa->id}}/edit" class="btn btn-primary btn-sm">
@@ -156,6 +183,7 @@
                                         @endif
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>
